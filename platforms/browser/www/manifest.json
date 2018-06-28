@@ -1,0 +1,10 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "CropDamage",
+  "short_name": "CropDamage",
+  "version": "com.phivolcs.cdct",
+  "author": "Chayserie Moises Canlas",
+  "icons": [],
+  "start_url": "index.html"
+}

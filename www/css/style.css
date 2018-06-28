@@ -1,0 +1,122 @@
+.ui-page{
+			
+				height:auto;
+				background-attachment:fixed;
+				background-repeat:no-repeat;
+				font-size:14px;
+				
+				
+			}
+			#ctitle{
+				margin-left:60px;
+				font-family:'Roboto Black';
+				font-size:40px;
+				font-weight:bold;
+				position:center;
+				color:#3a3a3a;
+			}
+			#myfooter, #myheader{
+				color:black;
+				height:40px;
+			}
+			.button-wrap{
+				padding-right:5px;
+				padding-left:5px;
+			}
+			a.ui-link {
+			text-decoration: none;
+			color:black;
+			}
+			#discontent{
+				background-color:rgba(255,255,255,0.8);
+				height:auto;
+			}
+			.ui-header .ui-title, .ui-footer .ui-title{
+				font-weight:bold;
+				font-size:15px;
+				margin:0;
+			}
+			.btncrop,.btncrop a{
+				width:80px;
+				height:80px;
+			}
+			.controlbox{
+				padding-left:15px;
+				padding-right:15px;
+			}
+			#savedata{
+			background-color:rgba(244, 83, 66,0.7);
+			}
+			
+			.btnmenu{
+				height:80px; 
+				font-size:12px
+			}
+			h4{
+				color:rgb(0,187,39)
+			}
+			#btnback, #btnsave{
+				margin-bottom:10px;
+				background-color:mediumseagreen;
+				border-radius:0px;
+			}
+			#entry{
+				background-color:#F5F5F5;
+			}
+			#discontent{
+				margin-left:5px;
+				margin-right:5px;
+			
+			}	
+			#showdata{
+				width:100%;
+				margin:0px;
+			}
+			.title{
+			text-align:center;
+			padding:20px;
+			font-weight:bold;
+			color:green;
+			
+			}
+			#croptable{
+			border:1px solid black;
+			border-collapse:collapse;
+			width:100%;
+			margin-right:-5px;
+			}
+			#croptable tr td{
+				padding:10px;
+				font-size:12px;
+				
+			}
+			#menu{
+				 background-image: url("../img/bg.jpeg");
+				background-repeat:no-repeat;
+				background-position:fixed;
+			}
+			.thumb{
+				width:40%;
+				position:relative;
+		
+			}
+			.btnphoto{
+				border:1px solid gray;
+			}
+			#gray{
+				color:gray;
+			}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <meta charset = "UTF-8" name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+		<link rel="stylesheet" href="css/jquery.mobile.icons-1.4.5.min.css">
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+		<link rel="stylesheet" href="css/cdct.css">
+		<link rel="stylesheet" href="css/style.css">
+		<script src="js/jquery.min.js"></script>
+		<script src="cordova.js"></script>
+		<script src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="cdct.js"></script>
+        <title>REDAS CDCT</title>
+    </head>
+    <body>
+		<div data-role="page" id="menu">
+			<div data-theme="a" data-tap-toggle="false" data-role="header" data-position="fixed">
+				<h1>Crop Damage Capture Tool</h1>
+			</div>
+			<section id="title">
+				<h1 id="ctitle">Crop Damage Capture Tool</h1>
+			</section>
+			<section>
+			<div class="ui-grid-a">
+				<div class="ui-block-b"><div class="button-wrap"><a href="#add"><button class="btnmenu ui-shadow ui-icon-plus ui-btn-icon-top ui-btn ui-corner-all">Add Crop Damage Data</button></a></div></div>
+				<div class="ui-block-b"><div class="button-wrap" ><a href="#display"><button id="displaydata" class="btnmenu ui-shadow ui-icon-bullets ui-btn-icon-top ui-btn ui-corner-all" >Display Damage Data</button></a></div></div>
+			</div>
+			<div class="ui-grid-a">
+				<div class="ui-block-b"><div class="button-wrap" ><a href="#geolocation"><button class="btnmenu ui-shadow ui-icon-location ui-btn-icon-top ui-btn ui-corner-all">Geolocation</button></a></div></div>
+				<div class="ui-block-b"><div class="button-wrap" ><a href="#settings"><button class="btnmenu ui-shadow ui-icon-gear ui-btn-icon-top ui-btn ui-corner-all" >Settings</button></a></div></div>
+				
+			</div>
+			<div class="ui-grid-a">
+				<div class="ui-block-b"><div class="button-wrap" ><a href="#export"><button class="btnmenu ui-shadow ui-icon-action ui-btn-icon-top ui-btn ui-corner-all" >Export</button></a></div></div>
+				<div class="ui-block-b"><div class="button-wrap" ><button id="quit" class="btnmenu ui-shadow ui-icon-power ui-btn-icon-top ui-btn ui-corner-all" style="color:red">Quit</button></div></div>
+				
+			</div>
+			</section>
+			<div data-role="footer" data-tap-toggle="false" data-position="fixed">
+			<h2>REDAS - CDCT V1</h2>
+			</div>
+		</div>
+		<!---------------Form for Rice Damage Data------------------>
+		<div data-role="page" id="add">
+			<div id="myheader" data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" data-hide-during-focus="" >
+			<a href ="#menu" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-back"></a>
+					<h2>Add Crop Damage Data</h2>
+			<a href="#menu" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-home" data-transition="pop"></a>		
+			</div>
+			<div data-role="controlgroup" id="discontent">	
+				<div data-role="controlgroup" class="controlbox" id="entry" data-theme="b">
+				<h4>Coordinates</h4>
+				<a href="#coorddialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-inline ui-icon-location ui-btn-icon-left ui-btn-b" style="width:100%";>Record Coordinates</a>
+					<div data-role="popup" id="coorddialog" data-overlay-theme="a" data-theme="b" data-dismissible="false" style="max-width:400px;">
+					<div data-role="header" data-theme="a">
+						<h4>Crop Coordinates</h4>
+					</div>
+					<div role="main" class="ui-content">
+						<label>Latitude:</label>
+						<input disabled type="text" id="clat">
+						<label>Longitude:</label>
+						<input disabled type="text" id="clng">
+						<button id="coordsave" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Save</button>
+						<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
+					</div>
+					</div>
+					<h4>Geography</h4>	
+					Latitude:
+					<input disabled type="text" id="lat" style="color:red";>
+					Longitude:
+					<input disabled type="text" class="req" id="lng" style="color:red";>
+					Province Name:
+					<select id="prov">
+						<option value = 'default'>Select Province Name</option>
+						<option value="">Ifugao</option>
+						<option value="">Ilocos Norte</option>
+						<option value="">Ilocos SUr</option>
+						<option value="">IloIlo</oution>
+						<option value="">Isabela</option>
+						<option value="">Kalinga</option>
+					</select>
+					Municipality Name:
+					<select id="muni">
+						<option value = 'default'>Select Municipality</option>
+						<option value="">Balbalan</option>
+						<option value="">Lubuagan</option>
+						<option value="">Pasil</option>
+						<option value="">Pinukpuk</option>
+						<option value="">Tabuk City</option>
+					</select>
+					Barangay Name:
+					<select id="brgy">
+						<option value = 'default'>Select Barangay</option>
+						<option value="">Agbanawag</option>
+						<option value="">Amlao</option>
+						<option value="">Appas</option>
+						<option value="">Bagumbayan</option>
+						<option value="">Balawag</option>
+					</select>
+					Farm Location(Sitio/Purok):
+					<input type="text" name="farmloc" id="farmloc" placeholder="Farm Location">
+					<hr>
+					<h4>Farm Information</h4>
+					Land Owner Name
+					<input type="text" id="owner" placeholder="LastName FirstName">
+					Farm Area (Hectare)
+					<input type="number" id="farea">
+					Farm Name
+					<input type="text" id="frname" placeholder="ex. Owner Farm1">
+					<hr>
+					<h4>Farmer Data</h4>
+					Farmer Last Name:
+					<input type="text" id="flname">
+					Farmer First Name:
+					<input type="text" id="ffname">
+					Farmer Address (Sitio/Purok)
+					<input type="text" id="faddress">
+					<hr>
+					<h4>Damage Information</h4>
+					Cause of Damage
+						<input type="text" id="dname" placeholder="ex. typhoon">
+						Season
+							<select id="season">
+							<option value="default">--Select Crop Season--</option>
+							<option value="wet">Wet Season</option>
+							<option value="dry">Dry Season</option>
+						</select>
+						<input type="checkbox" name="flood" id="flood" checked="">
+						<label for="flood">Flood</label>
+						Water Level (m)
+						<select id="level">
+							<option value="default">--Select Water Level-</option>
+							<option value="">1-2</option>
+							<option value="">3-4</option>
+							<option value="">5-6</option>
+							<option value="">7-8</option>
+							<option value=""> >=9</option>
+						</select><br>
+						Water Type:
+						<select id="wtype">
+							<option value="default">--Select Water Type--</option>
+							<option value="clear">Clear Water</option>
+							<option value="muddy">Muddy Water</option>
+						</select>
+						Days of Submergence:
+						<select id="submergedays">
+							<option value="default">--Select Days of Submergence--</option>
+							<option value="">1-2</option>
+							<option value="">3-4</option>
+							<option value="">5-6</option>
+							<option value="">7</option>
+						</select><br>
+						<input type="checkbox" name="wind" id="wind">
+						<label for="wind">Severe Wind</label>
+						Wind Velocity (KPH)
+						<select id="velocity">
+							<option value="default">--Select Wind Velocity--</option>
+							<option value="">70-100</option>
+							<option value="">101-150</option>
+							<option value="">>150</option></option>
+						</select>
+						Period of Exposure (Hours):
+						<select id="exposure">
+							<option value="default">--Select Period of Exposure--</option>
+							<option value=""><=12</option>
+							<option value="">>12</option></option>
+						</select>
+						<hr>
+					<h4>Crop Data</h4>
+					Crop Type
+					<select id="ctype">
+						<option value="default">--Select Crop Type--</option>
+						<option value="rice">Rice</option>
+						<option value="corn">Corn</option>
+					</select>
+					Ecosystem
+					<select id="ecosystem">
+					</select>
+					Seed Class:
+					<select id="sclass">
+					</select>
+					Stage
+					<select id="stage">
+						<option value="default">--Select Stage--</option>
+						<option value = 'default'>Select Stage of Crop</option>
+						<option value = 'seedling'>Seedling</option>
+						<option value = 'tillering'>Tillering</option>
+						<option value = 'stem'>Stem Elongation</option>
+						<option value = 'booting'>Booting</option>
+						<option value = 'heading'>Heading</option>
+						<option value = 'flowering'>Flowering</option>
+						<option value = 'milking'>Milking</option>
+						<option value = 'dough'>Dough</option>
+						<option value = 'ripening'>Ripening</option>
+					</select>
+					<hr>
+					<h4>Yield per Hectare (MT)<a href="#yloss" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a></h4>
+					<div data-role="popup" id="yloss" class="ui-content" data-theme="a" style="max-width:350px;">
+					<p>Yield per hectare in metric tons</p>
+					</div>
+					Yield Before Calamity<a href="#ybinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
+					<div data-role="popup" id="ybinfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					<p>refers to the average yield per hectare <strong>before</strong> the occurrence of the calamity</p>
+					</div>
+					<input type="number" id="yieldbefore">
+					Yield After Calamity<a href="#yafter" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
+					<div data-role="popup" id="yafter" class="ui-content" data-theme="a" style="max-width:350px;">
+					<p>refers to the actual average yield per hectare <strong>after</strong> the occurrence of the calamity</p>
+					</div>
+					<input type="number" id="yieldafter">
+					<h4>Area Affected (ha)</h4>
+					Partially Damage<a href="#partiallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
+					<div data-role="popup" id="partiallyinfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					<p>refers to the actual partially damage field per hectare <strong>after</strong> the occurrence of the calamity</p>
+					</div>
+					<input type="number" id="partially">
+					Totally Damage<a href="#totallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
+					<div data-role="popup" id="totallyinfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					<p>refers to the actual totally damage field per hectare <strong>after</strong> the occurrence of the calamity</p>
+					</div>
+					<input type="number" id="totally">
+					Remarks
+					<textarea cols="80" rows="8" name="remarks" id="remarks"></textarea>
+					<hr>
+					<h4>Photos</h4>
+					<button data-target = "t1" class="b1 btnphoto ui-btn ui-shadow ui-corner-all ui-icon-camera ui-btn-icon-left" id="c1">PHOTO 1</button>
+					<button data-target = "t2" class="b2 btnphoto ui-btn ui-shadow ui-corner-all ui-icon-camera ui-btn-icon-left" id="c2">PHOTO 2</button>
+					<div id="imgThumb">
+						<img class="thumb" data-filename="" src='img/noimg.png' id="t1">
+						<img class="thumb" data-filename="" src='img/noimg.png' id="t2">
+					</div>
+					<hr>
+					<a href="" id="btnsave" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">Save Crop</a>
+				</div>		
+			</div>
+			<div id="myfooter" data-tap-toggle="false" data-hide-during-focus="" data-role="footer" data-position="fixed">
+			<h2>Version 1.0.0</h2>
+			</div>
+		</div>
+		<div data-role="page" id="display">
+			<div id="myheader" data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" data-hide-during-focus="" >
+			<a href ="#menu" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-back"></a>
+					<h2>Display Crop Damage Data</h2>
+			<a href="#menu" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-home" data-transition="pop"></a>		
+			</div>
+			<div data-role="controlgroup" id="discontent">
+			<br>
+				<ul data-role="listview" id="croplist" data-autodividers="true" data-filter="true" data-inset="true"data-split-icon="edit" data-theme="b" data-split-theme="a" data-inset="true">
+					<!--<li>
+					<a href="#showdetails">
+					<h2>A Farmer Name</h2>
+					<p>Farm Location</p>
+					</a>		
+					<a href="#editdata" data-rel="popup" data-position-to="window" data-transition="pop">Details</a></li>
+					<li><a href="#">
+					<h2>B Farmer Name</h2>
+					<p>Farm Location</p></a>
+					<a href="#editdata" data-rel="popup" data-position-to="window" data-transition="pop">
+					<li><a href="#">
+					<h2>C Farmer Name</h2>
+					<p>Farm Location</p></a>
+					<a href="#editdata" data-rel="popup" data-position-to="window" data-transition="pop">Details</a></li>
+					<li><a href="#">
+					<h2>D Farmer Name</h2>
+					<p>Farm Location</p></a>
+					<a href="#editdata" data-rel="popup" data-position-to="window" data-transition="pop">Details</a></li>
+					<li><a href="#">
+					<h2>E Farmer Name</h2>
+					<p>Farm Location</p></a>
+					<a href="#editdata" data-rel="popup" data-position-to="window" data-transition="pop">Details</a></li>
+					<li><a href="#">
+					<h2>F Farmer Name</h2>
+					<p>Farm Location</p></a>
+					<a href="#editdata" data-rel="popup" data-position-to="window" data-transition="pop">Details</a></li> -->
+				</ul>
+				<!--for editing data-->
+				<div data-role="popup" id="editdata" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;"><h3>Crop Damage Details</h3>
+					<a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-arrow-l ui-btn-icon-left ui-btn-inline ui-mini">Back</a>
+					<a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">Cancel</a>
+				</div>
+				
+			</div>
+			<div id="myfooter" data-tap-toggle="false" data-role="footer" data-position="fixed">
+			<h2>REDAS - CDCT V1</h2>
+			</div>
+		</div>
+			<!--this page is to show specific data on the list view -->
+		
+		<div data-role="page" id="showdata">
+			<div data-role="header">
+				<h1 id="cropheader"></h1>
+			</div>
+			<div data-role="main" class="ui-content">
+				<table id="croptable">
+				</table>
+			</div>
+		</div>
+		<div data-role="page" id="geolocation">
+			<div id="myheader" data-tap-toggle="false" data-theme="a" data-role="header" data-position="fixed">
+				<a href ="#menu" class="ui-btn ui-corner-all ui-icon-back">back</a>
+						<h1>geolocation</h1>
+				<a href="#menu" class="ui-btn ui-corner-all ui-icon-home" data-transition="pop">Home</a>
+			</div>
+			<div id="discontent">
+				<h1>content here!!!!!</h1>
+			</div>
+			<div id="myfooter" data-tap-toggle="false" data-role="footer" data-position="fixed">
+			<h2>REDAS - CDCT V1</h2>
+			</div>
+		</div>
+		<div data-role="page" id="settings">
+			<div id="myheader" data-tap-toggle="false" data-theme="a" data-role="header" data-position="fixed">
+				<a href ="#menu" class="ui-btn ui-corner-all ui-icon-back">back</a>
+						<h1>Settings</h1>
+				<a href="#menu" class="ui-btn ui-corner-all ui-icon-home" data-transition="pop">Home</a>
+			</div>
+			<div id="discontent">
+				<button id="reset">Reset Database</button>
+			</div>
+			<div id="myfooter" data-tap-toggle="false" data-role="footer" data-position="fixed">
+			<h2>REDAS - CDCT V1</h2>
+			</div>
+		</div>
+		<div data-role="page" id="export">
+			<div id="myheader" data-tap-toggle="false" data-theme="a" data-role="header" data-position="fixed">
+				<a href ="#menu" class="ui-btn ui-corner-all ui-icon-back">back</a>
+						<h1>Export Data</h1>
+				<a href="#menu" class="ui-btn ui-corner-all ui-icon-home" data-transition="pop">Home</a>
+			</div>
+			<div id="myfooter" data-tap-toggle="false" data-role="footer" data-position="fixed">
+			<h2>REDAS - CDCT V1</h2>
+			</div>
+		</div>
+		
+		<!-------------------------Some Pop Up Here------------------------------->
+    </body>
+	
+</html>

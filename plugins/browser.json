@@ -1,0 +1,33 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.phivolcs.cdct"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.phivolcs.cdct"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.phivolcs.cdct"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "com.phivolcs.cdct"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.phivolcs.cdct"
+    },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "com.phivolcs.cdct"
+    },
+    "cordova-plugin-dbcopy": {
+      "PACKAGE_NAME": "com.phivolcs.cdct"
+    }
+  },
+  "dependent_plugins": {}
+}

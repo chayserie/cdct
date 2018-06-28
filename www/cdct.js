@@ -1,0 +1,405 @@
+
+var sdate;
+var stime;
+var db;
+var watchID;
+var dmgid;
+var lat;
+var lng;
+
+	//load when device is ready
+	document.addEventListener("deviceready",onDeviceReady,false);
+	
+	function onDeviceReady(){
+	watchID = navigator.geolocation.watchPosition(onSuccess, onError, {enableHighAccuracy:true});
+	datesurvey();
+	initDatabase();
+	$("#quit").click(function(){
+		navigator.app.exitApp();
+	});
+  	$("#c1").click(startcam);
+	$("#c2").click(startcam);
+	function startcam(){
+	var imgID = this.getAttribute("data-target");
+	navigator.camera.getPicture(onSuccess,onFail,{quality:50,destinationType:Camera.DestinationType.FILE_URI, correctOrientation:true});
+	function onSuccess(imageURI){
+		var image = document.getElementById(imgID);
+		image.src=imageURI;
+		
+		//move the picture to folder
+		
+		window.resolveLocalFileSystemURL(imageURI,function(fileEntry){
+			window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
+				fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
+					CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+					
+					   var lt=$("#lat").val();
+						var lg=$("#lng").val();
+						var fname = lt+"_"+lg+"_"+imgID+".jpg";
+					   alert(fname);
+					   fileEntry.moveTo(imgDir,fname,function(){
+							image.setAttribute("data-filename",fname);
+							
+						},function(e){
+							alert("Cant move picture");
+						});
+					},function(e){
+						alert("Cant open images folder");
+					});
+				},function(e){
+					alert("Cant open CDCT Folder");
+				});
+			},function(e){
+				alert("Cant open CDCT File System")
+			});
+		},function(e){
+			alert("Cant find picture file");
+		})
+		
+	}
+
+	function onFail(e){
+		alert("Failed because: " + e);
+	}
+}
+function getPictureUrl(fname,imgID){
+//alert("getPictureUrl fname: " + fname);
+//alert("getPictureUrl imgID: " + imgID);
+window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
+	fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
+		CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+		   imgDir.getFile(fname,{create:false,exclusive:false},function(imgFileEntry){
+			   $("#" + imgID).attr("src",imgFileEntry.toURL());
+		   });
+		},function(e){
+			alert("Cant open images folder");
+		});
+	},function(e){
+		alert("Cant open CDCT Folder");
+	});
+},function(e){
+	alert("Cant open CDCT File System")
+});
+}
+
+	$("#btnsave").click(function(){
+		datesurvey();
+		db.transaction(function(tx){
+			var damageid = "dmg_"+lat+"_"+lng;
+				lat = $("input:text[id=lat]").val();
+				lng= $("input:text[id=lng]").val();
+				alert(lat+" "+lng);
+			var prov = $("#prov").find(":selected").text();
+			var muni = $("#muni").find(":selected").text();
+			var brgy = $("#brgy").find(":selected").text();
+			var farmloc = $('input:text[id=farmloc]').val();
+			var owner = $('input:text[id=owner]').val();
+			var farmarea = $("#farea").val();
+			var frname = $('input:text[id=frname]').val();
+			var flastname = $('input:text[id=flname]').val();
+			var ffname = $('input:text[id=ffname]').val();
+			var faddress = $('input:text[id=faddress]').val();
+			var season = $("#season").find(":selected").text();
+			var dname = $('input:text[id=dname]').val();
+			var flood = $('input:checkbox[id=flood]').val();
+			var level = $("#level").find(":selected").text();
+			var wtype = $("#wtype").find(":selected").text();
+			var submergedays = $("#submergedays").find(":selected").text();
+			var wind = $('input:checkbox[id=wind]').val();
+			var velocity = $("#velocity").find(":selected").text();
+			var exposure = $("#exposure").find(":selected").text();
+			var ctype = $("#ctype").find(":selected").text();
+			var ecosystem = $("#ecosystem").find(":selected").text();
+			var sclass = $("#sclass").find(":selected").text();
+			var stage = $("#stage").find(":selected").text();
+			var yieldbefore = $('#yieldbefore').val();
+			var yieldafter = $('#yieldafter').val();
+			var partially = $('#partially').val();
+			var totally = $('#totally').val();
+			var remarks = $('#remarks').val();
+			var pname1 = $("#t1").attr("data-filename");
+			var pname2 = $("#t2").attr("data-filename");
+			
+			var isSaveOK = true;
+			if(lat==""){
+				isSaveOK=false;
+				$(".req1").addClass("req");
+				$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
+			}
+			if(lng==""){
+				isSaveOK=false;
+				$(".req1").addClass("req");
+				$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
+			}
+			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
+			
+			if (prov=="Select Province Name"){
+				prov="null"
+			}
+			if (muni=="Select Municipality"){
+				muni="null"
+			}
+			if (brgy=="Select Barangay"){
+				brgy="null"
+			}
+			if (season=="--Select Crop Season--"){
+				season="null"
+			}
+			if (level=="--Select Water Level-"){
+				level="null"
+			}
+			if (wtype=="--Select Water Type--"){
+				wtype="null"
+			}
+			if (submergedays=="--Select Days of Submergence--"){
+				submergedays="null"
+			}
+			if (velocity=="--Select Wind Velocity--"){
+				velocity="null"
+			}
+			if (exposure=="--Select Period of Exposure--"){
+				exposure="null"
+			}
+			if (ctype=="--Select Crop Type--"){
+				ctype="null"
+			}
+			if (ecosystem==""){
+				ecosystem="null"
+			}
+			if (sclass==""){
+				sclass="null"
+			}
+			if (stage=="--Select Stage--"){
+				stage="null"
+			}
+			
+			if(isSaveOK==false){
+			alert("Please get the coordinates");
+			}
+			if(isSaveOK){
+			var pname1=$("#t1").attr("data-filename");
+			var pname2=$("#t2").attr("data-filename");
+			var sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+season+"','"+dname+"','"+level+"','"+flood+"','"+wtype+"','"+submergedays+"','"+wind+"','"+velocity+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
+			tx.executeSql(sql);
+			
+			//refresh form
+			$("#t1").attr('src', 'img/noimg.png');
+			$("#t2").attr('src', 'img/noimg.png');
+			$("#add input[type=text]").val("");
+			$("#add input[type=number]").val("");
+			$("#add option[value='default']").attr('selected', 'selected');
+			$("#add select").selectmenu("refresh",true);
+			$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
+			alert("Save Successfully");
+		}
+		},function(e){
+		alert("ERROR:" + e.message)
+		});
+	
+	});
+	//show the data in listview
+	$("#displaydata").click(function(){
+		db.transaction(function(tx){
+		tx.executeSql("select * from CropDamage", [], function(tx,res){
+			$("#croplist").html("");
+			for(var x=0;x<res.rows.length;x++){
+				dmgid = res.rows.item(x).CropdamageID;
+				$("#croplist").append("<li data-id='"+dmgid+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='editbutton'></a></li>");	
+			}
+			$("#croplist").listview("refresh");
+			
+			$(".cropdetails").click(function(){
+				dmgid=$(this).parent().attr("data-id");
+				db.transaction(function(tx){
+					tx.executeSql("select * from CropDamage where CropdamageID='"+dmgid+"'",[],function(tx,res){
+						for(var x=0;x<res.rows.length;x++){
+							$("#cropheader").html(res.rows.item(x).lastname.toUpperCase());
+							$("#croptable").html(
+							"<tr><td td colspan='2' class='title'>GEOGRAPHY</td></tr>"+
+							"<tr><td>Province Name</td><td>"+res.rows.item(x).provname+"</td></tr>"+
+							"<tr><td>Latitude</td><td>"+res.rows.item(x).latitude+"</td></tr>"+
+							"<tr><td>Longitude</td><td>"+res.rows.item(x).longitude+"</td></tr>"+
+							"<tr><td>Municipality Name</td><td>"+res.rows.item(x).munname+"</td></tr>"+
+							"<tr><td>Barangay Name</td><td>"+res.rows.item(x).bgyname+"</td></tr>"+
+							"<tr><td>Farm Location(Purok/Sitio)</td><td>"+res.rows.item(x).farmloc+
+							"</td></tr>"+"<tr><td td colspan='2' class='title'>FARM INFORMATION</td></tr>"+
+							"<tr><td>Farm Owner</td><td>"+res.rows.item(x).ownername+"</td></tr>"+
+							"<tr><td>Farm Area(Hectare)</td><td>"+res.rows.item(x).farmarea+"</td></tr>"+
+							"<tr><td>Farm Name</td><td>"+res.rows.item(x).farmname+"</td></tr>"+
+							"<tr><td td colspan='2' class='title'>FARMER INFORMATION</td></tr>"+
+							"<tr><td>Farmer Name</td><td>"+res.rows.item(x).lastname+", "+res.rows.item(x).firstname+"</td></tr>"+
+							"<tr><td>Farmer Address (Purok/Sitio)</td><td>"+res.rows.item(x).farmeraddress+"</td></tr>"+
+							"<tr><td td colspan='2' class='title'>DAMAGE INFORMATION</td></tr>"+
+							"<tr><td>Season</td><td>"+res.rows.item(x).season+"</td></tr>"+
+							"<tr><td>Damage Name</td><td>"+res.rows.item(x).damagename+"</td></tr>"+
+							"<tr><td>Flood</td><td>"+res.rows.item(x).flood+"</td></tr>"+
+							"<tr><td>Flood Level (meter)</td><td>"+res.rows.item(x).flevel+"</td></tr>"+
+							"<tr><td>Water Type</td><td>"+res.rows.item(x).watertype+"</td></tr>"+
+							"<tr><td>Days of Submergence</td><td>"+res.rows.item(x).submergeddays+"</td></tr>"+
+							"<tr><td>Severe Wind</td><td>"+res.rows.item(x).wind+"</td></tr>"+
+							"<tr><td>Velocity</td><td>"+res.rows.item(x).velocity+"</td></tr>"+
+							"<tr><td>Period of Exposure</td><td>"+res.rows.item(x).exposure+"</td></tr>"+
+							"<tr><td td colspan='2' class='title'>CROP INFORMATION</td></tr>"+
+							"<tr><td>Crop Type</td><td>"+res.rows.item(x).ctype+"</td></tr>"+
+							"<tr><td>Ecosystem</td><td>"+res.rows.item(x).ecosystem+"</td></tr>"+
+							"<tr><td>Seed Class</td><td>"+res.rows.item(x).sclass+"</td></tr>"+
+							"<tr><td>Stage</td><td>"+res.rows.item(x).stage+"</td></tr>"+
+							"<tr><td td colspan='2' class='title'>YIELD LOSSES</td></tr>"+
+							"<tr><td>Yield Before Calamity</td><td>"+res.rows.item(x).yieldbefore+
+							"</td></tr>"+"<tr><td>Yield After Calamity </td><td>"+res.rows.item(x).yieldafter+
+							"</td></tr>"+"<tr><td>Partially Damage</td><td>"+res.rows.item(x).partially+
+							"</td></tr>"+"<tr><td>Totally Damage</td><td>"+res.rows.item(x).totally+
+							"</td></tr>"+"<tr><td td colspan='2' class='title'>OTHER INFORMATION</td></tr>"+
+							"<tr><td>PHOTO 1</td><td>"+res.rows.item(x).photo1+"</td></tr>"+
+							"<tr><td>PHOTO 2</td><td>"+res.rows.item(x).photo2+"</td></tr>"+
+							"<tr><td>Surveyed By</td><td>"+res.rows.item(x).surveyedby+"</td></tr>"+
+							"<tr><td>Date Survey</td><td>"+res.rows.item(x).datesurvey+"</td></tr>"+
+							"<tr><td>Time Survey</td><td>"+res.rows.item(x).timesurvey+"</td></tr>"
+							);
+						}
+						$.mobile.navigate("#showdata");
+						$("tr:odd").css("background-color", "#E8E8E8");
+					});
+				});
+				
+			});
+		
+		});
+			
+		
+	},function(e){
+	alert("ERROR:" + e.message)
+	});
+	});
+	
+}//end of device ready
+function initDatabase() {
+	  db = window.sqlitePlugin.openDatabase({
+		  name: 'cdat_mobile.db',
+		  location: 'default'
+		  });
+		 db.transaction(function(tx){
+			 tx.executeSql('CREATE TABLE if not exists CropDamage(CropdamageID INTEGER NOT NULL,latitude REAL, longitude REAL,provname TEXT,munname TEXT,bgyname TEXT,farmloc TEXT,ownername TEXT,farmarea TEXT,farmname TEXT,lastname TEXT,firstname TEXT,farmeraddress TEXT,season TEXT, damagename TEXT,flevel TEXT,flood TEXT,watertype TEXT,submergeddays TEXT,wind TEXT,velocity TEXT,exposure TEXT,ctype TEXT,ecosystem TEXT,sclass TEXT,stage TEXT,yieldbefore TEXT,yieldafter TEXT,partially TEXT,totally TEXT,remarks TEXT,photo1 TEXT,photo2 TEXT,surveyedby TEXT,datesurvey TEXT,timesurvey)');
+		 },function(e){
+			alert("ERROR:" + e.message)
+			}); 
+			
+		//reset the database
+		$("#reset").click(function(){
+			db.transaction(function(tx){
+				tx.executeSql("delete * from CropDamage");
+			});
+			$(":mobile-pagecontainer").pagecontainer("change", "#menu", {reloadPage:false});
+			alert("Successfully reset the database");
+		});
+	}//end of database initialization
+  function datesurvey(){
+		var curdate = new Date();
+		var year = curdate.getFullYear();
+		var month = ('0'+(curdate.getMonth() + 1)).slice(-2);
+		var day = ('0'+ curdate.getDate()).slice(-2);
+		var hour = ('0'+curdate.getHours()).slice(-2);
+		var minutes = ('0'+curdate.getMinutes()).slice(-2);
+		var sec = ('0'+curdate.getSeconds()).slice(-2);
+		sdate = year +'-'+ month +'-'+ day;
+		stime = hour + ':' + minutes+':'+sec;
+		
+	}
+	function camerapicture(){
+	navigator.camera.getPicture(onSuccess, onFail,{
+		quality:20,
+		destinationType: Camera.DestinationType.FILE_URI,
+		encodingType: Camera.EncodingType.JPEG,
+		mediaType:Camera.MediaType.Picture,
+		correctOrientation:true,
+		targetWidth:200,
+		targetHeight:200
+		
+		
+	});
+	function onSuccess(imageData) { 
+      var image = document.getElementById('img1'); 
+      image.src = "data:image/jpeg;base64," + imageData;
+	  window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
+			fs.root.getDirectory("CDCT",{create:true},function(fdir){
+				fdir.getFile("img.jpg",{create:true,exclusive:false},function(fileEntry){
+					alert("File Okay? " + fileEntry.isFile.toString());
+					alert("File Ready: " + fileEntry.fullPath);
+					//write now
+					fileEntry.createWriter(function(fileWriter){
+						fileWriter.onwriteend=function(){
+							alert("Successfully written file to /n" + fileEntry.fullPath);
+						}
+
+						fileWriter.onerror = function(e){
+							alert("Cant Write to File because: " + e.toString());
+						}
+
+						//var dataObj = new Blob([imageData],{type:'image/jpeg'});
+						fileWriter.write(imageData);
+					});
+				},function(){
+					alert("Cant Create File");
+				});
+			});
+		},function(){
+			alert("Cant Open File System");
+		});
+   }  
+   
+   function onFail(message) { 
+      alert('Failed because: ' + message); 
+   } 
+}
+
+
+ function onSuccess(position) {
+	lat=position.coords.latitude;
+	lng=position.coords.longitude;
+	 lat=$("#clat").val(lat.toFixed(6));
+	 lng=$("#clng").val(lng.toFixed(6));
+	// alert(lat+lng);
+	}
+function onError(error){
+	alert('code' +error.code +'\n'+ 'message:' +error.message);
+}
+
+
+$(document).ready(function () {
+	
+	$("#coordsave").click(function(){
+		var lat = $('input:text[id=clat]').val();
+		var lng = $('input:text[id=clng]').val();
+		$("#lat").val(lat);
+		$("#lng").val(lng);
+		$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
+		});
+	
+		$("#ctype").change(function(){
+			var ctype=$("#ctype").val();
+			var ecosystem = $("#ecosystem");
+			if(ctype=="rice"){
+					$(ecosystem).val("");
+					$(ecosystem).html("<option value selected>--Select Ecosystem--</option><option value='inbred'>Irrigated - Inbred</option><option value='hybrid'>Irrigated - Hybrid</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
+			}
+	
+			else{
+				$(ecosystem).html("<option value selected>--Select Ecosystem--</option><option value='irrigated'>Irrigated</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
+			}
+			
+		});
+		
+		$("#ecosystem").change(function(){
+		 var ecosystem = $("#ecosystem").val();
+		 var sclass=$("#sclass");
+			if(ecosystem == "inbred"){
+				$(sclass).val("");
+				$(sclass).html("<option value selected>--Select Seed Class--</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option><option value='registered'>Registered Seed</option>");
+			}
+			else{
+				$(sclass).html("<option value selected>--Select Seed Class--</option>");
+			}
+		});
+		
+	});//end of document ready
+	
