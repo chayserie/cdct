@@ -6,6 +6,7 @@ var watchID;
 var dmgid;
 var lat;
 var lng;
+var places;
 
 	//load when device is ready
 	document.addEventListener("deviceready",onDeviceReady,false);
@@ -271,7 +272,35 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	alert("ERROR:" + e.message)
 	});
 	});
-	
+
+	/**
+	 * Dynamic Places using places.json
+	 * 
+	 * Submit an ajax call to places.json file, then use the array of values to make dynamic combo boxes
+	 */
+
+	 $.getJSON("places.json", function(json) {
+		places = json;
+		console.table(places);
+
+		//populate provinces. 
+		var provName="";
+		var regions=[];
+
+		for(var i=0; i<places.length; i++){
+			//get unique regions
+			if(!regions.includes(places[i].Reg_Name)){
+				console.log(places[i].Reg_Name);
+				regions.push(places[i].Reg_Name);
+			}
+			regions.sort();
+			for(var j=0; j<regions.length; j++){
+				$("#prov").append("<optgroup label='" + regions[j] + "'></optgroup>");
+			}
+			
+
+		}
+	});
 }//end of device ready
 function initDatabase() {
 	  db = window.sqlitePlugin.openDatabase({
