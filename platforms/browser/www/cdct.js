@@ -274,33 +274,31 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	});
 
 	/**
-	 * Dynamic Places using places.json
+	 * Dynamic Places 
+	 * https://github.com/chayserie/cdct/issues/2
 	 * 
 	 * Submit an ajax call to places.json file, then use the array of values to make dynamic combo boxes
+	 * This is not recommended :(
+	 * becasuse parsing the whole 7MB json is too slow (tested on browser) 
 	 */
+	
+	 /**
+	  * Swipe actions for data
+	  * https://github.com/chayserie/cdct/issues/3
+	  * 
+	  * Create functionality to support jQueryMobile swipe events for data\
+	  * * Delete (With Confirm)
+	  * * View
+	  * * Update
+	  */
+	 $(document).on("swiperight swipeleft", "#croplist li", function(e){
+		 if(confirm("Delete this record?\nFarmer: " + $(this).find("h2").text())){
+			alert("Deleted (but not realy");
+			//Execute SQL Delete command here
+		 }
+	 });
 
-	 $.getJSON("places.json", function(json) {
-		places = json;
-		console.table(places);
-
-		//populate provinces. 
-		var provName="";
-		var regions=[];
-
-		for(var i=0; i<places.length; i++){
-			//get unique regions
-			if(!regions.includes(places[i].Reg_Name)){
-				console.log(places[i].Reg_Name);
-				regions.push(places[i].Reg_Name);
-			}
-			regions.sort();
-			for(var j=0; j<regions.length; j++){
-				$("#prov").append("<optgroup label='" + regions[j] + "'></optgroup>");
-			}
-			
-
-		}
-	});
+	 
 }//end of device ready
 function initDatabase() {
 	  db = window.sqlitePlugin.openDatabase({
