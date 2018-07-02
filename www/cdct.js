@@ -6,6 +6,7 @@ var watchID;
 var dmgid;
 var lat;
 var lng;
+var places;
 
 	//load when device is ready
 	document.addEventListener("deviceready",onDeviceReady,false);
@@ -271,7 +272,16 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	alert("ERROR:" + e.message)
 	});
 	});
-	
+
+	/**
+	 * Dynamic Places using places.json
+	 * 
+	 * Submit an ajax call to places.json file, then use the array of values to make dynamic combo boxes
+	 * This is not recommended :(
+	 * becasuse parsing the whole 7MB json is too slow (tested on browser)
+	 */
+
+	 
 }//end of device ready
 function initDatabase() {
 	  db = window.sqlitePlugin.openDatabase({
