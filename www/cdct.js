@@ -278,7 +278,7 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	 * 
 	 * Submit an ajax call to places.json file, then use the array of values to make dynamic combo boxes
 	 * This is not recommended :(
-	 * becasuse parsing the whole 7MB json is too slow (tested on browser)
+	 * becasuse parsing the whole 7MB json is too slow (tested on browser) 
 	 */
 
 	 
