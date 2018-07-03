@@ -234,6 +234,14 @@ module.exports = [
     "clobbers": [
       "QRScanner"
     ]
+  },
+  {
+    "id": "cordova-plugin-dbcopy.sqlDB",
+    "file": "plugins/cordova-plugin-dbcopy/www/sqlDB.js",
+    "pluginId": "cordova-plugin-dbcopy",
+    "clobbers": [
+      "window.plugins.sqlDB"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -244,7 +252,8 @@ module.exports.metadata =
   "cordova-plugin-file": "6.0.1",
   "cordova-sqlite-storage": "2.3.2",
   "cordova-plugin-geolocation": "4.0.1",
-  "cordova-plugin-qrscanner": "2.6.0"
+  "cordova-plugin-qrscanner": "2.6.0",
+  "cordova-plugin-dbcopy": "1.0.4"
 };
 // BOTTOM OF METADATA
 });

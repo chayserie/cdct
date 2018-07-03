@@ -210,7 +210,7 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 			$("#croplist").listview("refresh");
 			
 			$(".cropdetails").click(function(){
-				dmgid=$(this).parent().attr("data-id");
+			//	dmgid=$(this).parent().attr("data-id");
 				db.transaction(function(tx){
 					tx.executeSql("select * from CropDamage where CropdamageID='"+dmgid+"'",[],function(tx,res){
 						for(var x=0;x<res.rows.length;x++){
@@ -293,7 +293,9 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	  */
 	 $(document).on("swiperight swipeleft", "#croplist li", function(e){
 		 if(confirm("Delete this record?\nFarmer: " + $(this).find("h2").text())){
-			alert("Deleted (but not realy");
+			alert("Deleted (but not realy)");
+			var ids = $(this).attr("data-id");
+			alert(ids);
 			//Execute SQL Delete command here
 		 }
 	 });
@@ -314,7 +316,7 @@ function initDatabase() {
 		//reset the database
 		$("#reset").click(function(){
 			db.transaction(function(tx){
-				tx.executeSql("delete * from CropDamage");
+				tx.executeSql("delete from CropDamage");
 			});
 			$(":mobile-pagecontainer").pagecontainer("change", "#menu", {reloadPage:false});
 			alert("Successfully reset the database");

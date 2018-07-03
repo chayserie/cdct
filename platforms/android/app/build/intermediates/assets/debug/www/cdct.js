@@ -6,6 +6,7 @@ var watchID;
 var dmgid;
 var lat;
 var lng;
+var places;
 
 	//load when device is ready
 	document.addEventListener("deviceready",onDeviceReady,false);
@@ -85,10 +86,11 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	$("#btnsave").click(function(){
 		datesurvey();
 		db.transaction(function(tx){
-			var damageid = "dmg_"+lat+"_"+lng;
-				lat = $("input:text[id=lat]").val();
-				lng= $("input:text[id=lng]").val();
+			lat = $("input:text[id=lat]").val();
+			lng= $("input:text[id=lng]").val();
 				alert(lat+" "+lng);
+			var damageid = "dmg_"+lat+lng;
+			alert(damageid);	
 			var prov = $("#prov").find(":selected").text();
 			var muni = $("#muni").find(":selected").text();
 			var brgy = $("#brgy").find(":selected").text();
@@ -216,7 +218,8 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 							$("#cropheader").html(res.rows.item(x).lastname.toUpperCase());
 							$("#croptable").html(
 							"<tr><td td colspan='2' class='title'>GEOGRAPHY</td></tr>"+
-							"<tr><td>Province Name</td><td>"+res.rows.item(x).provname+"</td></tr>"+
+							"<tr><td>Damage ID</td><td>"+res.rows.item(x).CropdamageID+"</td></tr>"+
+							"<tr><td>Latitude</td><td>"+res.rows.item(x).provname+"</td></tr>"+
 							"<tr><td>Latitude</td><td>"+res.rows.item(x).latitude+"</td></tr>"+
 							"<tr><td>Longitude</td><td>"+res.rows.item(x).longitude+"</td></tr>"+
 							"<tr><td>Municipality Name</td><td>"+res.rows.item(x).munname+"</td></tr>"+
@@ -271,12 +274,41 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	alert("ERROR:" + e.message)
 	});
 	});
+
+	/**
+	 * Dynamic Places 
+	 * https://github.com/chayserie/cdct/issues/2
+	 * 
+	 * Submit an ajax call to places.json file, then use the array of values to make dynamic combo boxes
+	 * This is not recommended :(
+	 * becasuse parsing the whole 7MB json is too slow (tested on browser) 
+	 */
 	
-	QRScanner.show(function(status){
-	  alert(status);
-	});
-		
-	
+	 /**
+	  * Swipe actions for data
+	  * https://github.com/chayserie/cdct/issues/3
+	  * 
+	  * Create functionality to support jQueryMobile swipe events for data\
+	  * * Delete (With Confirm)
+	  * * View
+	  * * Update
+	  */
+	 $(document).on("swiperight swipeleft", "#croplist li", function(e){
+		 if(confirm("Delete this record?\nFarmer: " + $(this).find("h2").text())){
+			var ids = $(this).attr("data-id");
+			alert(ids);
+			//Execute SQL Delete command here
+			db.transaction(function(tx){
+				tx.executeSql("delete from CropDamage where CropdamageID='"+ids+"'");
+			 
+			});
+			$("#croplist").listview("refresh");
+			$(this).remove();
+			alert("Deleted "+ids);
+		 }
+	 });
+
+	 
 }//end of device ready
 function initDatabase() {
 	  db = window.sqlitePlugin.openDatabase({
@@ -292,7 +324,7 @@ function initDatabase() {
 		//reset the database
 		$("#reset").click(function(){
 			db.transaction(function(tx){
-				tx.executeSql("delete * from CropDamage");
+				tx.executeSql("delete from CropDamage");
 			});
 			$(":mobile-pagecontainer").pagecontainer("change", "#menu", {reloadPage:false});
 			alert("Successfully reset the database");

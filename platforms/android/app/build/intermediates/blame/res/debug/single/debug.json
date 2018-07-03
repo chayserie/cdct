@@ -1,11 +1,11 @@
 [
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_secondary_text_material_dark.xml.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\color\\abc_secondary_text_material_dark.xml"
-    },
-    {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_abc_list_selector_disabled_holo_light.9.png.flat",
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-mdpi\\abc_list_selector_disabled_holo_light.9.png"
+    },
+    {
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_secondary_text_material_dark.xml.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\color\\abc_secondary_text_material_dark.xml"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_abc_ic_voice_search_api_mtrl_alpha.png.flat",
@@ -28,12 +28,12 @@
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xhdpi\\abc_scrubber_control_off_mtrl_alpha.png"
     },
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_abc_ic_ab_back_mtrl_am_alpha.png.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxxhdpi\\abc_ic_ab_back_mtrl_am_alpha.png"
-    },
-    {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_activity_chooser_view_list_item.xml.flat",
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\layout\\abc_activity_chooser_view_list_item.xml"
+    },
+    {
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_abc_ic_ab_back_mtrl_am_alpha.png.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxxhdpi\\abc_ic_ab_back_mtrl_am_alpha.png"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_abc_ic_commit_search_api_mtrl_alpha.png.flat",
@@ -44,16 +44,16 @@
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xhdpi\\abc_ic_menu_paste_mtrl_am_alpha.png"
     },
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_abc_ic_ab_back_mtrl_am_alpha.png.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-hdpi\\abc_ic_ab_back_mtrl_am_alpha.png"
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_abc_btn_switch_to_on_mtrl_00001.9.png.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxhdpi\\abc_btn_switch_to_on_mtrl_00001.9.png"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_abc_ic_go_search_api_mtrl_alpha.png.flat",
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xhdpi\\abc_ic_go_search_api_mtrl_alpha.png"
     },
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_abc_btn_switch_to_on_mtrl_00001.9.png.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxhdpi\\abc_btn_switch_to_on_mtrl_00001.9.png"
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_abc_ic_ab_back_mtrl_am_alpha.png.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-hdpi\\abc_ic_ab_back_mtrl_am_alpha.png"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_abc_list_selector_disabled_holo_light.9.png.flat",
@@ -136,12 +136,12 @@
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xhdpi\\abc_scrubber_primary_mtrl_alpha.9.png"
     },
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_abc_btn_switch_to_on_mtrl_00012.9.png.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-mdpi\\abc_btn_switch_to_on_mtrl_00012.9.png"
-    },
-    {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_abc_list_longpressed_holo.9.png.flat",
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-hdpi\\abc_list_longpressed_holo.9.png"
+    },
+    {
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_abc_btn_switch_to_on_mtrl_00012.9.png.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-mdpi\\abc_btn_switch_to_on_mtrl_00012.9.png"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldrtl-mdpi_abc_ic_menu_copy_mtrl_am_alpha.png.flat",
@@ -168,12 +168,12 @@
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxhdpi\\abc_btn_switch_to_on_mtrl_00012.9.png"
     },
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_abc_scrubber_control_to_pressed_mtrl_000.png.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxxhdpi\\abc_scrubber_control_to_pressed_mtrl_000.png"
-    },
-    {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_support_simple_spinner_dropdown_item.xml.flat",
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\layout\\support_simple_spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_abc_scrubber_control_to_pressed_mtrl_000.png.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxxhdpi\\abc_scrubber_control_to_pressed_mtrl_000.png"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_item_background_holo_light.xml.flat",
@@ -196,16 +196,16 @@
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxhdpi\\abc_ic_go_search_api_mtrl_alpha.png"
     },
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_abc_ic_ab_back_mtrl_am_alpha.png.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxhdpi\\abc_ic_ab_back_mtrl_am_alpha.png"
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_part_chronometer.xml.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\layout\\notification_template_part_chronometer.xml"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\anim_abc_slide_in_bottom.xml.flat",
         "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\anim\\abc_slide_in_bottom.xml"
     },
     {
-        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_part_chronometer.xml.flat",
-        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\layout\\notification_template_part_chronometer.xml"
+        "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_abc_ic_ab_back_mtrl_am_alpha.png.flat",
+        "source": "C:\\Users\\PC-03\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\031eb0cd3b11cc73dd597623ae51a508\\res\\drawable-xxhdpi\\abc_ic_ab_back_mtrl_am_alpha.png"
     },
     {
         "merged": "E:\\Projects\\cdct\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_abc_cab_background_top_mtrl_alpha.9.png.flat",
