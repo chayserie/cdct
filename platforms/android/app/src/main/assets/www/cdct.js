@@ -7,6 +7,7 @@ var dmgid;
 var lat;
 var lng;
 var places;
+var savemode="add";
 
 	//load when device is ready
 	document.addEventListener("deviceready",onDeviceReady,false);
@@ -181,7 +182,20 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 			if(isSaveOK){
 			var pname1=$("#t1").attr("data-filename");
 			var pname2=$("#t2").attr("data-filename");
-			var sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+season+"','"+dname+"','"+level+"','"+flood+"','"+wtype+"','"+submergedays+"','"+wind+"','"+velocity+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
+
+			var sql="";
+
+			if(savemode=="add"){
+				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+season+"','"+dname+"','"+level+"','"+flood+"','"+wtype+"','"+submergedays+"','"+wind+"','"+velocity+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
+			}else{
+				alert(dmgid);
+				sql = "update CropDamage set latitude='"+lat+"', lastname='"+flastname+"' where CropdamageID = '"+dmgid.text();+"'";
+			}
+
+			savemode="add";
+
+
+			
 			tx.executeSql(sql);
 			
 			//refresh form
@@ -199,16 +213,41 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 		});
 	
 	});
+
+
 	//show the data in listview
 	$("#displaydata").click(function(){
 		db.transaction(function(tx){
 		tx.executeSql("select * from CropDamage", [], function(tx,res){
 			$("#croplist").html("");
 			for(var x=0;x<res.rows.length;x++){
-				dmgid = res.rows.item(x).CropdamageID;
-				$("#croplist").append("<li data-id='"+dmgid+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='editbutton'></a></li>");	
+				var dmgid = res.rows.item(x).CropdamageID;
+				$("#croplist").append("<li data-id='"+dmgid+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='#' class='editbutton'></a></li>");	
 			}
 			$("#croplist").listview("refresh");
+			
+			$(".editbutton").click(function(e){
+				var id = $(this).parent().attr("data-id");
+				var name = $(this).parent().find("h2");
+				alert("Updating: " +id+" "+name);
+				//Create db transaction searching for the dmg id
+				db.transaction(function(tx){
+					tx.executeSql("select * from CropDamage where CropdamageID='"+id+"'",[],function(tx,res){
+						var len = res.rows.length;
+						var lat = res.rows.item(0)['latitude'];
+						var name = res.rows.item(0)['lastname'];
+						alert(len);
+						alert(name);
+						//Update all fields 
+						$("input:text[id=lat]").val(lat);
+						$("input:text[id=flname]").val(name);
+						//alert(name);
+						//Show Form Page
+						savemode="edit";
+						$.mobile.navigate("#add");
+					});
+				});
+			});
 			
 			$(".cropdetails").click(function(){
 				dmgid=$(this).parent().attr("data-id");
