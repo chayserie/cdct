@@ -3,10 +3,11 @@ var sdate;
 var stime;
 var db;
 var watchID;
-var dmgid;
+var id;
 var lat;
 var lng;
 var places;
+var savemode="add";
 
 	//load when device is ready
 	document.addEventListener("deviceready",onDeviceReady,false);
@@ -82,14 +83,20 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	alert("Cant open CDCT File System")
 });
 }
+ $("#addcrop").click(function(){
+	$.mobile.navigate("#add");
+	$("#addheader").text("Add Crop Damage Data");
+	$("#btnsave").text("Save Data");
+});
 
 	$("#btnsave").click(function(){
 		datesurvey();
 		db.transaction(function(tx){
-			var damageid = "dmg_"+lat+"_"+lng;
-				lat = $("input:text[id=lat]").val();
-				lng= $("input:text[id=lng]").val();
+			lat = $("input:text[id=lat]").val();
+			lng= $("input:text[id=lng]").val();
 				alert(lat+" "+lng);
+			var damageid = "dmg_"+lat+lng;
+			alert(damageid);	
 			var prov = $("#prov").find(":selected").text();
 			var muni = $("#muni").find(":selected").text();
 			var brgy = $("#brgy").find(":selected").text();
@@ -180,9 +187,25 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 			if(isSaveOK){
 			var pname1=$("#t1").attr("data-filename");
 			var pname2=$("#t2").attr("data-filename");
-			var sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+season+"','"+dname+"','"+level+"','"+flood+"','"+wtype+"','"+submergedays+"','"+wind+"','"+velocity+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
+
+			var sql="";
+
+			if(savemode=="add"){
+				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+season+"','"+dname+"','"+level+"','"+flood+"','"+wtype+"','"+submergedays+"','"+wind+"','"+velocity+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
+				alert("Save Successfully");
+			}else{
+				
+				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', season='"+season+"', damagename='"+dname+"', flevel='"+level+"', flood='"+flood+"', watertype='"+wtype+"', submergeddays='"+submergedays+"', wind='"+wind+"', velocity='"+velocity+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
+				$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
+				
+				$("#croplist").listview("refresh");
+				alert("update successfully");
+			}
+
+			savemode="add";
 			tx.executeSql(sql);
-			
+			$("#addheader").text("Add Crop Damage Data");
+			$("#btnsave").text('Save Crop');
 			//refresh form
 			$("#t1").attr('src', 'img/noimg.png');
 			$("#t2").attr('src', 'img/noimg.png');
@@ -191,35 +214,104 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 			$("#add option[value='default']").attr('selected', 'selected');
 			$("#add select").selectmenu("refresh",true);
 			$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
-			alert("Save Successfully");
+			
 		}
 		},function(e){
 		alert("ERROR:" + e.message)
 		});
-	
 	});
 	//show the data in listview
 	$("#displaydata").click(function(){
+		$("#addheader").text("Update Crop Damage Data");
+		$("#btnsave").text("Update Data");
 		db.transaction(function(tx){
 		tx.executeSql("select * from CropDamage", [], function(tx,res){
 			$("#croplist").html("");
 			for(var x=0;x<res.rows.length;x++){
-				dmgid = res.rows.item(x).CropdamageID;
-				$("#croplist").append("<li data-id='"+dmgid+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='editbutton'></a></li>");	
+				var dmgid = res.rows.item(x).CropdamageID;
+				$("#croplist").append("<li data-id='"+dmgid+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='#' class='editbutton'></a></li>");	
 			}
 			$("#croplist").listview("refresh");
 			
+			$(".editbutton").click(function(e){
+				 id = $(this).parent().attr("data-id");
+				var name = $(this).find("h2");
+				alert("Updating: " +id+name);
+				//Create db transaction searching for the dmg id
+				db.transaction(function(tx){
+					tx.executeSql("select * from CropDamage where CropdamageID='"+id+"'",[],function(tx,res){
+						for(var y=0;y<res.rows.length;y++){
+							var dmgitem = res.rows.item(y);
+							var p1 = dmgitem.photo1;
+							var p2 = dmgitem.photo2;
+							window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
+									fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
+										CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+											p1 = imgDir.toURL() + p1;
+											p2 = imgDir.toURL() + p2;
+											$("#t1").attr("src",p1);
+											$("#t2").attr("src",p2);
+											alert(p1+p2);
+										},function(e){
+											alert("Cant open images folder");
+										});
+									},function(e){
+										alert("Cant open EDM Folder");
+									});
+								},function(e){
+									alert("Cant open EDM File System")
+								});
+							$("input:text[id=lat]").val(dmgitem.latitude);
+							$("input:text[id=lng]").val(dmgitem.longitude);
+							$('#prov').find(":selected").text(dmgitem.provname);
+							$('#muni').find(":selected").text(dmgitem.munname);
+							$('#brgy').find(":selected").text(dmgitem.bgyname);
+							$("input:text[id=farmloc]").val(dmgitem.farmloc);
+							$("input:text[id=owner]").val(dmgitem.ownername);
+							$("#farea").val(dmgitem.farmarea);
+							$("input:text[id=frname]").val(dmgitem.farmname);
+							$("input:text[id=ffname]").val(dmgitem.firstname);
+							$("input:text[id=flname]").val(dmgitem.lastname);
+							$("input:text[id=faddress]").val(dmgitem.farmeraddress);
+							$('#season').find(":selected").text(dmgitem.season);
+							$("input:text[id=dname]").val(dmgitem.damagename);
+							$('#level').find(":selected").text(dmgitem.flevel);
+							$("input:checkbox[id=flood]").val(dmgitem.flood);
+							$('#wtype').find(":selected").text(dmgitem.watertype);
+							$('#submergedays').find(":selected").text(dmgitem.submergeddays);
+							$("input:checkbox[id=wind]").val(dmgitem.wind);
+							$('#velocity').find(":selected").text(dmgitem.velocity);
+							$('#exposure').find(":selected").text(dmgitem.exposure);
+							$('#ctype').find(":selected").text(dmgitem.ctype);
+							$('#ecosystem').find(":selected").text(dmgitem.ecosystem);
+							$('#sclass').find(":selected").text(dmgitem.sclass);
+							$('#stage').find(":selected").text(dmgitem.stage);
+							$("#yieldbefore").val(dmgitem.yieldbefore);
+							$("#yieldafter").val(dmgitem.yieldafter);
+							$("#partially").val(dmgitem.partially);
+							$("#totally").val(dmgitem.totally);
+							$("input:text[id=remarks]").val(dmgitem.remarks);
+							
+						savemode="edit";
+						$.mobile.navigate("#add");
+						}
+						
+					});
+				});
+			});
+			
 			$(".cropdetails").click(function(){
-			//	dmgid=$(this).parent().attr("data-id");
+				dmgid=$(this).parent().attr("data-id");
 				db.transaction(function(tx){
 					tx.executeSql("select * from CropDamage where CropdamageID='"+dmgid+"'",[],function(tx,res){
 						for(var x=0;x<res.rows.length;x++){
 							$("#cropheader").html(res.rows.item(x).lastname.toUpperCase());
 							$("#croptable").html(
 							"<tr><td td colspan='2' class='title'>GEOGRAPHY</td></tr>"+
-							"<tr><td>Province Name</td><td>"+res.rows.item(x).provname+"</td></tr>"+
+							"<tr><td>Damage ID</td><td>"+res.rows.item(x).CropdamageID+"</td></tr>"+
 							"<tr><td>Latitude</td><td>"+res.rows.item(x).latitude+"</td></tr>"+
 							"<tr><td>Longitude</td><td>"+res.rows.item(x).longitude+"</td></tr>"+
+							"<tr><td>Province Name</td><td>"+res.rows.item(x).provname+"</td></tr>"+
 							"<tr><td>Municipality Name</td><td>"+res.rows.item(x).munname+"</td></tr>"+
 							"<tr><td>Barangay Name</td><td>"+res.rows.item(x).bgyname+"</td></tr>"+
 							"<tr><td>Farm Location(Purok/Sitio)</td><td>"+res.rows.item(x).farmloc+
@@ -255,9 +347,11 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 							"<tr><td>PHOTO 2</td><td>"+res.rows.item(x).photo2+"</td></tr>"+
 							"<tr><td>Surveyed By</td><td>"+res.rows.item(x).surveyedby+"</td></tr>"+
 							"<tr><td>Date Survey</td><td>"+res.rows.item(x).datesurvey+"</td></tr>"+
-							"<tr><td>Time Survey</td><td>"+res.rows.item(x).timesurvey+"</td></tr>"
+							"<tr><td>Time Survey</td><td>"+res.rows.item(x).timesurvey+"</td></tr>"+
+							"<tr><td>Remarks</td><td>"+res.rows.item(x).remarks+"</td></tr>"
 							);
 						}
+						
 						$.mobile.navigate("#showdata");
 						$("tr:odd").css("background-color", "#E8E8E8");
 					});
@@ -293,10 +387,16 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	  */
 	 $(document).on("swiperight swipeleft", "#croplist li", function(e){
 		 if(confirm("Delete this record?\nFarmer: " + $(this).find("h2").text())){
-			alert("Deleted (but not realy)");
 			var ids = $(this).attr("data-id");
 			alert(ids);
 			//Execute SQL Delete command here
+			db.transaction(function(tx){
+				tx.executeSql("delete from CropDamage where CropdamageID='"+ids+"'");
+			 
+			});
+			$("#croplist").listview("refresh");
+			$(this).remove();
+			alert("Deleted "+ids);
 		 }
 	 });
 
