@@ -93,27 +93,38 @@ function refreshform(){
 	$("#add input[type=number]").val("");
 	$("select option").removeAttr("selected");
 	$("select").selectmenu("refresh",true);
-	$("input[type='checkbox']").prop("checked",true).checkboxradio("refresh");
+    $('input[type=checkbox]').prop('checked', false).checkboxradio('refresh');
+		
 }
 		
  $("#addcrop").click(function(){
 	$.mobile.navigate("#add");
 	savemode = "add";
-	//refresh form
-	refreshform();
 	$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
 	$("#addheader").text("Add Crop Damage Data");
 	$("#btnsave").text("Save Data");
+	//refresh form
+	refreshform();
 });
 
 	$("#btnsave").click(function(){
 		datesurvey();
 		db.transaction(function(tx){
+			
+			if($("#wind").prop('checked')){ 
+			value="true"; 
+			}else{
+				value="false"; 
+			}
+			if($("#flood").prop('checked')){ 
+			value="true"; 
+			}else{
+				value="false"; 
+			}
 			lat = $("input:text[id=lat]").val();
 			lng= $("input:text[id=lng]").val();
 				alert(lat+" "+lng);
 			var damageid = "dmg_"+lat+lng;
-			alert(damageid);	
 			var prov = $("#prov").find(":selected").text();
 			var muni = $("#muni").find(":selected").text();
 			var brgy = $("#brgy").find(":selected").text();
@@ -126,11 +137,11 @@ function refreshform(){
 			var faddress = $('input:text[id=faddress]').val();
 			var season = $("#season").find(":selected").text();
 			var dname = $('input:text[id=dname]').val();
-			var flood = $('input:checkbox[id=flood]').val();
+			var flood = $('#flood').prop("checked");
 			var level = $("#level").find(":selected").text();
 			var wtype = $("#wtype").find(":selected").text();
 			var submergedays = $("#submergedays").find(":selected").text();
-			var wind = $('input:checkbox[id=wind]').val();
+			var wind = $('#wind').prop("checked");
 			var velocity = $("#velocity").find(":selected").text();
 			var exposure = $("#exposure").find(":selected").text();
 			var ctype = $("#ctype").find(":selected").text();
@@ -144,7 +155,6 @@ function refreshform(){
 			var remarks = $('#remarks').val();
 			var pname1 = $("#t1").attr("data-filename");
 			var pname2 = $("#t2").attr("data-filename");
-			
 			var isSaveOK = true;
 			if(lat==""){
 				isSaveOK=false;
@@ -215,6 +225,8 @@ function refreshform(){
 				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', season='"+season+"', damagename='"+dname+"', flevel='"+level+"', flood='"+flood+"', watertype='"+wtype+"', submergeddays='"+submergedays+"', wind='"+wind+"', velocity='"+velocity+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
 				$("#croplist").listview("refresh");
 				$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
+				var samp = $("#" + id).find("h2");
+				alert(samp);
 				alert("update successfully");
 			}
 			savemode="add";
