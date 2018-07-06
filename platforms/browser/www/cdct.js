@@ -1,4 +1,3 @@
-
 var sdate;
 var stime;
 var db;
@@ -83,10 +82,26 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 	alert("Cant open CDCT File System")
 });
 }
+
+function refreshform(){
+	//refresh form
+	$("#t1").attr('src', 'img/noimg.png');
+	$("#t2").attr('src', 'img/noimg.png');
+	$("#t1").attr('data-filename', '');
+	$("#t2").attr('data-filename', '');
+	$("#add input[type=text]").val("");
+	$("#add input[type=number]").val("");
+	$("select option").removeAttr("selected");
+	$("select").selectmenu("refresh",true);
+	$("input[type='checkbox']").prop("checked",true).checkboxradio("refresh");
+}
+
  $("#addcrop").click(function(){
-	$.mobile.navigate("#add");
+	savemode = "add";
+	$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
 	$("#addheader").text("Add Crop Damage Data");
 	$("#btnsave").text("Save Data");
+	refreshform();
 });
 
 	$("#btnsave").click(function(){
@@ -171,10 +186,10 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 			if (ctype=="--Select Crop Type--"){
 				ctype="null"
 			}
-			if (ecosystem==""){
+			if (ecosystem=="--Select Ecosystem--"){
 				ecosystem="null"
 			}
-			if (sclass==""){
+			if (sclass=="--Select Seed Class--"){
 				sclass="null"
 			}
 			if (stage=="--Select Stage--"){
@@ -182,38 +197,27 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 			}
 			
 			if(isSaveOK==false){
-			alert("Please get the coordinates");
+			alert("Please get coordinates");
 			}
-			if(isSaveOK){
-			var pname1=$("#t1").attr("data-filename");
-			var pname2=$("#t2").attr("data-filename");
+		
 
+			
+			if(isSaveOK){
+		
 			var sql="";
 
 			if(savemode=="add"){
 				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+season+"','"+dname+"','"+level+"','"+flood+"','"+wtype+"','"+submergedays+"','"+wind+"','"+velocity+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
 				alert("Save Successfully");
-			}else{
-				
+			}else if(savemode=="edit"){
 				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', season='"+season+"', damagename='"+dname+"', flevel='"+level+"', flood='"+flood+"', watertype='"+wtype+"', submergeddays='"+submergedays+"', wind='"+wind+"', velocity='"+velocity+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
 				$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
-				
-				$("#croplist").listview("refresh");
 				alert("update successfully");
 			}
-
-			savemode="add";
 			tx.executeSql(sql);
-			$("#addheader").text("Add Crop Damage Data");
-			$("#btnsave").text('Save Crop');
 			//refresh form
-			$("#t1").attr('src', 'img/noimg.png');
-			$("#t2").attr('src', 'img/noimg.png');
-			$("#add input[type=text]").val("");
-			$("#add input[type=number]").val("");
-			$("#add option[value='default']").attr('selected', 'selected');
-			$("#add select").selectmenu("refresh",true);
-			$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
+			refreshform();
+			$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
 			
 		}
 		},function(e){
@@ -228,8 +232,8 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 		tx.executeSql("select * from CropDamage", [], function(tx,res){
 			$("#croplist").html("");
 			for(var x=0;x<res.rows.length;x++){
-				var dmgid = res.rows.item(x).CropdamageID;
-				$("#croplist").append("<li data-id='"+dmgid+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='#' class='editbutton'></a></li>");	
+				 id = res.rows.item(x).CropdamageID;
+				$("#croplist").append("<li data-id='"+id+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='#' class='editbutton'></a></li>");	
 			}
 			$("#croplist").listview("refresh");
 			
@@ -294,16 +298,16 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 							
 						savemode="edit";
 						$.mobile.navigate("#add");
-						}
 						
+						}
 					});
 				});
 			});
 			
 			$(".cropdetails").click(function(){
-				dmgid=$(this).parent().attr("data-id");
+				id=$(this).parent().attr("data-id");
 				db.transaction(function(tx){
-					tx.executeSql("select * from CropDamage where CropdamageID='"+dmgid+"'",[],function(tx,res){
+					tx.executeSql("select * from CropDamage where CropdamageID='"+id+"'",[],function(tx,res){
 						for(var x=0;x<res.rows.length;x++){
 							$("#cropheader").html(res.rows.item(x).lastname.toUpperCase());
 							$("#croptable").html(
@@ -320,7 +324,7 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 							"<tr><td>Farm Area(Hectare)</td><td>"+res.rows.item(x).farmarea+"</td></tr>"+
 							"<tr><td>Farm Name</td><td>"+res.rows.item(x).farmname+"</td></tr>"+
 							"<tr><td td colspan='2' class='title'>FARMER INFORMATION</td></tr>"+
-							"<tr><td>Farmer Name</td><td>"+res.rows.item(x).lastname+", "+res.rows.item(x).firstname+"</td></tr>"+
+							"<tr><td>Farmer Name</td><td>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</td></tr>"+
 							"<tr><td>Farmer Address (Purok/Sitio)</td><td>"+res.rows.item(x).farmeraddress+"</td></tr>"+
 							"<tr><td td colspan='2' class='title'>DAMAGE INFORMATION</td></tr>"+
 							"<tr><td>Season</td><td>"+res.rows.item(x).season+"</td></tr>"+
@@ -508,13 +512,14 @@ $(document).ready(function () {
 			var ctype=$("#ctype").val();
 			var ecosystem = $("#ecosystem");
 			if(ctype=="rice"){
-					$(ecosystem).val("");
-					$(ecosystem).html("<option value selected>--Select Ecosystem--</option><option value='inbred'>Irrigated - Inbred</option><option value='hybrid'>Irrigated - Hybrid</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
+				$(ecosystem).html("<option value='default'>--Select Ecosystem--</option><option value='inbred'>Irrigated - Inbred</option><option value='hybrid'>Irrigated - Hybrid</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
 			}
-	
 			else{
-				$(ecosystem).html("<option value selected>--Select Ecosystem--</option><option value='irrigated'>Irrigated</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
+				$(ecosystem).html("<option value='default'>--Select Ecosystem--</option><option value='irrigated'>Irrigated</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
 			}
+			
+			$("#ecosystem option").removeAttr("selected");
+			$("#ecosystem").selectmenu("refresh",true);
 			
 		});
 		
@@ -523,12 +528,15 @@ $(document).ready(function () {
 		 var sclass=$("#sclass");
 			if(ecosystem == "inbred"){
 				$(sclass).val("");
-				$(sclass).html("<option value selected>--Select Seed Class--</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option><option value='registered'>Registered Seed</option>");
+				$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option><option value='registered'>Registered Seed</option>");
 			}
 			else{
-				$(sclass).html("<option value selected>--Select Seed Class--</option>");
+				$(sclass).html("<option value='default'>--Select Seed Class--</option>");
 			}
+			$("#sclass option").removeAttr("selected");
+			$("#sclass").selectmenu("refresh",true);
 		});
+		
 		
 	});//end of document ready
 	
