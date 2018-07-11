@@ -440,7 +440,103 @@ function initDatabase() {
 			$(":mobile-pagecontainer").pagecontainer("change", "#menu", {reloadPage:false});
 			alert("Successfully reset the database");
 		});
+		savetocsv();
 	}//end of database initialization
+	function savetocsv(){
+		$("#exportcsv").click(function(){
+		var expo = "CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey\n";
+		//alert(expo);
+		db.transaction(function(tx){
+			tx.executeSql("select * from CropDamage order by CropdamageID asc", [], function(tx,res){
+				for(var x=0;x<res.rows.length;x++){
+					var xdata = res.rows.item(x);
+					expo = expo+xdata.CropdamageID+","+
+							xdata.latitude+","+
+							xdata.longitude+","+
+							xdata.provname+","+
+							xdata.munname+","+
+							xdata.bgyname+","+
+							xdata.farmloc+","+
+							xdata.ownername+","+
+							xdata.farmarea+","+
+							xdata.farmname+","+
+							xdata.lastname+","+
+							xdata.firstname+","+
+							xdata.farmeraddress+","+
+							xdata.season+","+
+							xdata.damagename+","+
+							xdata.flevel+","+
+							xdata.flood+","+
+							xdata.watertype+","+
+							xdata.submergeddays+","+
+							xdata.wind+","+
+							xdata.velocity+","+
+							xdata.exposure+","+
+							xdata.ctype+","+
+							xdata.ecosystem+","+
+							xdata.sclass+","+
+							xdata.stage+","+
+							xdata.yieldbefore+","+
+							xdata.yieldafter+","+
+							xdata.partially+","+
+							xdata.totally+","+
+							xdata.remarks+","+
+							xdata.photo1+","+
+							xdata.photo2+","+
+							xdata.surveyedby+","+
+							xdata.datesurvey+","+
+							xdata.timesurvey+", \n";
+				}
+				alert(expo);
+				exportdb(expo);
+			},function(error){
+				alert("ExecuteSql Error: " + error);
+			});
+		},function(error){
+			alert("error"+error);
+		});
+	});
+	}
+	function exportdb(expo){
+		 window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
+				fs.root.getDirectory("CDCT",{create:true},function(fdir){
+					var d = new Date();
+					var y = d.getFullYear();
+					var m = d.getMonth() + 1;
+					if(m < 10) m = "0" + m;
+					var dt = d.getDate();
+					if(dt < 10) dt = "0" + dt;
+					var hour = ('0'+d.getHours()).slice(-2);
+					var minutes = ('0'+d.getMinutes()).slice(-2);
+					var sec = ('0'+d.getSeconds()).slice(-2);
+					var saveday = y+m+dt+"_"+hour+minutes+sec;
+					var exportfilename = "CDCT_Export_" +saveday+".csv";
+					alert(exportfilename);
+					fdir.getFile(exportfilename,{create:true,exclusive:false},function(fileEntry){
+						//alert("File Okay? " + fileEntry.isFile.toString());
+						//alert("File Ready: " + fileEntry.fullPath);
+						//write now
+						fileEntry.createWriter(function(fileWriter){
+							fileWriter.onwriteend=function(){
+								alert("Successfully written file to" + fileEntry.fullPath);
+							}
+
+							fileWriter.onerror = function(e){
+								alert("Cant Write to File because: " + e.toString());
+							}
+
+							//var dataObj = new Blob([imageData],{type:'image/jpeg'});
+							fileWriter.write(expo);
+						});
+					},function(){
+						alert("Cant Create File");
+					});
+				});
+			},function(){
+				alert("Cant Open File System");
+		});
+	}
+	
   function datesurvey(){
 		var curdate = new Date();
 		var year = curdate.getFullYear();
@@ -551,6 +647,8 @@ $(document).ready(function () {
 			$("#sclass option").removeAttr("selected");
 			$("#sclass").selectmenu("refresh",true);
 		});
+		
+		
 				
 	});//end of document ready
 	
