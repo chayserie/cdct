@@ -216,28 +216,6 @@ module.exports = [
         "clobbers": [
             "SQLitePlugin"
         ]
-    },
-    {
-        "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
-        "id": "cordova-plugin-qrscanner.QRScanner",
-        "pluginId": "cordova-plugin-qrscanner",
-        "clobbers": [
-            "QRScanner"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-qrscanner/src/browser/plugin.min.js",
-        "id": "cordova-plugin-qrscanner.QRScannerProxy",
-        "pluginId": "cordova-plugin-qrscanner",
-        "runs": true
-    },
-    {
-        "file": "plugins/cordova-plugin-dbcopy/www/sqlDB.js",
-        "id": "cordova-plugin-dbcopy.sqlDB",
-        "pluginId": "cordova-plugin-dbcopy",
-        "clobbers": [
-            "window.plugins.sqlDB"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -246,10 +224,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.3.3",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-file": "6.0.1",
-    "cordova-sqlite-storage": "2.3.2",
     "cordova-plugin-geolocation": "4.0.1",
-    "cordova-plugin-qrscanner": "2.6.0",
-    "cordova-plugin-dbcopy": "1.0.4"
+    "cordova-sqlite-storage": "2.3.3"
 }
 // BOTTOM OF METADATA
 });

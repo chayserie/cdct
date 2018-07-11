@@ -23,14 +23,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-sqlite-storage": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-sqlite-storage"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-geolocation": {
     "source": {
       "type": "registry",
@@ -39,18 +31,10 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-qrscanner": {
+  "cordova-sqlite-storage": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-qrscanner@^2.6.0"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-dbcopy": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-dbcopy"
+      "id": "cordova-sqlite-storage@^2.3.3"
     },
     "is_top_level": true,
     "variables": {}

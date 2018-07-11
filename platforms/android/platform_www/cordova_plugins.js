@@ -206,14 +206,6 @@ module.exports = [
     "runs": true
   },
   {
-    "id": "cordova-sqlite-storage.SQLitePlugin",
-    "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-    "pluginId": "cordova-sqlite-storage",
-    "clobbers": [
-      "SQLitePlugin"
-    ]
-  },
-  {
     "id": "cordova-plugin-geolocation.geolocation",
     "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
     "pluginId": "cordova-plugin-geolocation",
@@ -228,19 +220,11 @@ module.exports = [
     "runs": true
   },
   {
-    "id": "cordova-plugin-qrscanner.QRScanner",
-    "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
-    "pluginId": "cordova-plugin-qrscanner",
+    "id": "cordova-sqlite-storage.SQLitePlugin",
+    "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+    "pluginId": "cordova-sqlite-storage",
     "clobbers": [
-      "QRScanner"
-    ]
-  },
-  {
-    "id": "cordova-plugin-dbcopy.sqlDB",
-    "file": "plugins/cordova-plugin-dbcopy/www/sqlDB.js",
-    "pluginId": "cordova-plugin-dbcopy",
-    "clobbers": [
-      "window.plugins.sqlDB"
+      "SQLitePlugin"
     ]
   }
 ];
@@ -250,10 +234,8 @@ module.exports.metadata =
   "cordova-plugin-whitelist": "1.3.3",
   "cordova-plugin-camera": "4.0.3",
   "cordova-plugin-file": "6.0.1",
-  "cordova-sqlite-storage": "2.3.2",
   "cordova-plugin-geolocation": "4.0.1",
-  "cordova-plugin-qrscanner": "2.6.0",
-  "cordova-plugin-dbcopy": "1.0.4"
+  "cordova-sqlite-storage": "2.3.3"
 };
 // BOTTOM OF METADATA
 });

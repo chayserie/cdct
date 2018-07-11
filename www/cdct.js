@@ -198,10 +198,10 @@ function refreshform(){
 			if (ctype=="--Select Crop Type--"){
 				ctype="null"
 			}
-			if (ecosystem=="Select Ecosystem"){
+			if (ecosystem=="Select Ecosystem" || ecosystem == ""){
 				ecosystem="null"
 			}
-			if (sclass=="Select Seed Class"){
+			if (sclass=="Select Seed Class" || sclass == ""){
 				sclass="null"
 			}
 			if (stage=="--Select Stage--"){
@@ -392,7 +392,7 @@ function refreshform(){
 	 * 
 	 * Submit an ajax call to places.json file, then use the array of values to make dynamic combo boxes
 	 * This is not recommended :(
-	 * becasuse parsing the whole 7MB json is too slow (tested on browser) 
+	 * because parsing the whole 7MB json is too slow (tested on browser) 
 	 */
 	
 	 /**
@@ -421,17 +421,27 @@ function refreshform(){
 
 	 
 }//end of device ready
+
 function initDatabase() {
 	  db = window.sqlitePlugin.openDatabase({
 		  name: 'cdat_mobile.db',
-		  location: 'default'
+		  location: 'default',
+		  androidDatabaseImplementation:2,
+		  androidLockWorkaround:1
 		  });
-		 db.transaction(function(tx){
-			 tx.executeSql('CREATE TABLE if not exists CropDamage(CropdamageID INTEGER NOT NULL,latitude REAL, longitude REAL,provname TEXT,munname TEXT,bgyname TEXT,farmloc TEXT,ownername TEXT,farmarea TEXT,farmname TEXT,lastname TEXT,firstname TEXT,farmeraddress TEXT,season TEXT, damagename TEXT,flevel TEXT,flood TEXT,watertype TEXT,submergeddays TEXT,wind TEXT,velocity TEXT,exposure TEXT,ctype TEXT,ecosystem TEXT,sclass TEXT,stage TEXT,yieldbefore TEXT,yieldafter TEXT,partially TEXT,totally TEXT,remarks TEXT,photo1 TEXT,photo2 TEXT,surveyedby TEXT,datesurvey TEXT,timesurvey)');
-		 },function(e){
-			alert("ERROR:" + e.message)
-			}); 
+		//getting province name for select menu
+		db.transaction(function(txn){
+		txn.executeSql("SELECT distinct ProvName FROM GeoInfo ORDER BY ProvName ASC",[],function(txn,result){
+			$("#prov").html("<option value selected>Select Province</option>");
+			for(var x = 0; x < result.rows.length;x++){
+				$("#prov").append("<option value='"+result.rows.item(x).ProvName+"'>" + result.rows.item(x).ProvName + "</option>");
+			}
 			
+		});
+	},
+	function(e){
+		alert("Error: " + e.message)
+	});
 		//reset the database
 		$("#reset").click(function(){
 			db.transaction(function(tx){

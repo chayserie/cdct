@@ -25,19 +25,11 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.sqlc.SQLitePlugin\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.Geolocation\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"QRScanner\"><param name=\"android-package\" value=\"com.bitpay.cordova.qrscanner.QRScanner\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"sqlDB\"><param name=\"android-package\" value=\"me.rahul.plugins.sqlDB.sqlDB\" /></feature>",
+              "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.sqlc.SQLitePlugin\" /></feature>",
               "count": 1
             }
           ]
@@ -61,18 +53,6 @@
             {
               "xml": "<uses-feature android:name=\"android.hardware.location.gps\" />",
               "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.CAMERA\" android:required=\"false\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-feature android:name=\"android.hardware.camera.front\" android:required=\"false\" />",
-              "count": 1
             }
           ],
           "application": [
@@ -81,12 +61,12 @@
               "count": 1
             }
           ],
-          "/manifest": [
-            {
-              "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-              "count": 1
-            }
-          ]
+          "/manifest": []
+        }
+      },
+      "config.xml": {
+        "parents": {
+          "/*": []
         }
       }
     }
@@ -101,16 +81,10 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.phivolcs.cdct"
     },
-    "cordova-sqlite-storage": {
-      "PACKAGE_NAME": "com.phivolcs.cdct"
-    },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "com.phivolcs.cdct"
     },
-    "cordova-plugin-qrscanner": {
-      "PACKAGE_NAME": "com.phivolcs.cdct"
-    },
-    "cordova-plugin-dbcopy": {
+    "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.phivolcs.cdct"
     }
   },
@@ -322,14 +296,6 @@
       "runs": true
     },
     {
-      "id": "cordova-sqlite-storage.SQLitePlugin",
-      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-      "pluginId": "cordova-sqlite-storage",
-      "clobbers": [
-        "SQLitePlugin"
-      ]
-    },
-    {
       "id": "cordova-plugin-geolocation.geolocation",
       "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
       "pluginId": "cordova-plugin-geolocation",
@@ -344,19 +310,11 @@
       "runs": true
     },
     {
-      "id": "cordova-plugin-qrscanner.QRScanner",
-      "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
-      "pluginId": "cordova-plugin-qrscanner",
+      "id": "cordova-sqlite-storage.SQLitePlugin",
+      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+      "pluginId": "cordova-sqlite-storage",
       "clobbers": [
-        "QRScanner"
-      ]
-    },
-    {
-      "id": "cordova-plugin-dbcopy.sqlDB",
-      "file": "plugins/cordova-plugin-dbcopy/www/sqlDB.js",
-      "pluginId": "cordova-plugin-dbcopy",
-      "clobbers": [
-        "window.plugins.sqlDB"
+        "SQLitePlugin"
       ]
     }
   ],
@@ -364,9 +322,7 @@
     "cordova-plugin-whitelist": "1.3.3",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-file": "6.0.1",
-    "cordova-sqlite-storage": "2.3.2",
     "cordova-plugin-geolocation": "4.0.1",
-    "cordova-plugin-qrscanner": "2.6.0",
-    "cordova-plugin-dbcopy": "1.0.4"
+    "cordova-sqlite-storage": "2.3.3"
   }
 }

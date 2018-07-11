@@ -27,10 +27,8 @@
     </platform>
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
-    <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
-    <plugin name="cordova-plugin-qrscanner" spec="^2.6.0" />
-    <plugin name="cordova-plugin-dbcopy" spec="^2.0.0" />
+    <plugin name="cordova-sqlite-storage" spec="^2.3.3" />
     <engine name="android" spec="^7.0.0" />
     <engine name="browser" spec="^5.0.3" />
 </widget>

@@ -392,7 +392,7 @@ function refreshform(){
 	 * 
 	 * Submit an ajax call to places.json file, then use the array of values to make dynamic combo boxes
 	 * This is not recommended :(
-	 * becasuse parsing the whole 7MB json is too slow (tested on browser) 
+	 * because parsing the whole 7MB json is too slow (tested on browser) 
 	 */
 	
 	 /**
@@ -424,14 +424,10 @@ function refreshform(){
 function initDatabase() {
 	  db = window.sqlitePlugin.openDatabase({
 		  name: 'cdat_mobile.db',
-		  location: 'default'
+		  location: 'default',
+		  androidDatabaseImplementation:2
 		  });
-		 db.transaction(function(tx){
-			 tx.executeSql('CREATE TABLE if not exists CropDamage(CropdamageID INTEGER NOT NULL,latitude REAL, longitude REAL,provname TEXT,munname TEXT,bgyname TEXT,farmloc TEXT,ownername TEXT,farmarea TEXT,farmname TEXT,lastname TEXT,firstname TEXT,farmeraddress TEXT,season TEXT, damagename TEXT,flevel TEXT,flood TEXT,watertype TEXT,submergeddays TEXT,wind TEXT,velocity TEXT,exposure TEXT,ctype TEXT,ecosystem TEXT,sclass TEXT,stage TEXT,yieldbefore TEXT,yieldafter TEXT,partially TEXT,totally TEXT,remarks TEXT,photo1 TEXT,photo2 TEXT,surveyedby TEXT,datesurvey TEXT,timesurvey)');
-		 },function(e){
-			alert("ERROR:" + e.message)
-			}); 
-			
+		
 		//reset the database
 		$("#reset").click(function(){
 			db.transaction(function(tx){
@@ -506,15 +502,15 @@ function initDatabase() {
 					if(m < 10) m = "0" + m;
 					var dt = d.getDate();
 					if(dt < 10) dt = "0" + dt;
-					var hour = ('0'+curdate.getHours()).slice(-2);
-					var minutes = ('0'+curdate.getMinutes()).slice(-2);
-					var sec = ('0'+curdate.getSeconds()).slice(-2);
+					var hour = ('0'+d.getHours()).slice(-2);
+					var minutes = ('0'+d.getMinutes()).slice(-2);
+					var sec = ('0'+d.getSeconds()).slice(-2);
 					var saveday = y+m+dt+"_"+hour+minutes+sec;
 					var exportfilename = "CDCT_Export_" +saveday+".csv";
 					alert(exportfilename);
 					fdir.getFile(exportfilename,{create:true,exclusive:false},function(fileEntry){
-						alert("File Okay? " + fileEntry.isFile.toString());
-						alert("File Ready: " + fileEntry.fullPath);
+						//alert("File Okay? " + fileEntry.isFile.toString());
+						//alert("File Ready: " + fileEntry.fullPath);
 						//write now
 						fileEntry.createWriter(function(fileWriter){
 							fileWriter.onwriteend=function(){

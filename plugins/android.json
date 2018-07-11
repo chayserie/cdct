@@ -16,16 +16,10 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.phivolcs.cdct"
     },
-    "cordova-sqlite-storage": {
-      "PACKAGE_NAME": "com.phivolcs.cdct"
-    },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "com.phivolcs.cdct"
     },
-    "cordova-plugin-qrscanner": {
-      "PACKAGE_NAME": "com.phivolcs.cdct"
-    },
-    "cordova-plugin-dbcopy": {
+    "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.phivolcs.cdct"
     }
   },
