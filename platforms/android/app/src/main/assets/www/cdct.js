@@ -6,12 +6,48 @@ var id;
 var lat;
 var lng;
 var places;
+var user;
 var savemode="add";
-
+//for login page
+$(document).ready(function(){
+	$.getJSON("places.json", function(data) {
+    console.log(data); // this will show the info 
+	});
+	$("#btnlogin").click(function(){
+		user = $("#user").val();
+		var id = user.substring(0,1);
+		user=user.substring(1);
+		if($("#remember").is(":checked")){
+			localStorage.setItem("id",user);
+		}
+		if(id == '#'){
+			alert("Your User ID is: "+ user);	
+			location = "index.html#menu";
+		}
+		else if (id != '#' && id != ''){
+			alert("Wrong User ID");
+		}
+	});
+	
+	$("#logout").click(function(){
+	localStorage.removeItem("id");
+	alert("Logged Out");
+	$.mobile.navigate("#login");
+	});
+});
 	//load when device is ready
 	document.addEventListener("deviceready",onDeviceReady,false);
 	
 	function onDeviceReady(){
+	user = localStorage.getItem("id");
+	console.log("user" + user);
+	if(user == "" || user == "undefined" || user == null){
+		alert("Please Enter User ID");
+	}
+	else if(user !== ""){
+		alert("welcome back  : " + user)
+		$.mobile.navigate("#menu")
+	}
 	watchID = navigator.geolocation.watchPosition(onSuccess, onError, {enableHighAccuracy:true});
 	datesurvey();
 	initDatabase();
@@ -36,8 +72,7 @@ var savemode="add";
 					
 					   var lt=$("#lat").val();
 						var lg=$("#lng").val();
-						var fname = lt+"_"+lg+"_"+imgID+".jpg";
-					   alert(fname);
+						var fname = user+'_'+lt+"_"+lg+"_"+imgID+".jpg";
 					   fileEntry.moveTo(imgDir,fname,function(){
 							image.setAttribute("data-filename",fname);
 							
@@ -121,6 +156,18 @@ function refreshform(){
 			}else{
 				value="false"; 
 			}
+			if($("#faddr").prop('checked')){
+				var faddr = $("#farmloc").val();
+				$("#faddress").val(faddr);
+			}else{
+				$("#fadress").val("");
+			}
+			if($("#lowner").prop('checked')){
+				var lowner = $("#flname").val()+$("#ffname").val();
+				$("#owner").val(lowner);
+			}else{
+				$("#owner").val("");
+			}
 			lat = $("input:text[id=lat]").val();
 			lng= $("input:text[id=lng]").val();
 				alert(lat+" "+lng);
@@ -135,14 +182,10 @@ function refreshform(){
 			var flastname = $('input:text[id=flname]').val();
 			var ffname = $('input:text[id=ffname]').val();
 			var faddress = $('input:text[id=faddress]').val();
-			var season = $("#season").find(":selected").text();
-			var dname = $('input:text[id=dname]').val();
 			var flood = $('#flood').prop("checked");
 			var level = $("#level").find(":selected").text();
-			var wtype = $("#wtype").find(":selected").text();
 			var submergedays = $("#submergedays").find(":selected").text();
 			var wind = $('#wind').prop("checked");
-			var velocity = $("#velocity").find(":selected").text();
 			var exposure = $("#exposure").find(":selected").text();
 			var ctype = $("#ctype").find(":selected").text();
 			var ecosystem = $("#ecosystem").find(":selected").text();
@@ -177,20 +220,11 @@ function refreshform(){
 			if (brgy=="Select Barangay"){
 				brgy="null"
 			}
-			if (season=="--Select Crop Season--"){
-				season="null"
-			}
 			if (level=="--Select Water Level-"){
 				level="null"
 			}
-			if (wtype=="--Select Water Type--"){
-				wtype="null"
-			}
 			if (submergedays=="--Select Days of Submergence--"){
 				submergedays="null"
-			}
-			if (velocity=="--Select Wind Velocity--"){
-				velocity="null"
 			}
 			if (exposure=="--Select Period of Exposure--"){
 				exposure="null"
@@ -219,10 +253,11 @@ function refreshform(){
 			var sql="";
 
 			if(savemode=="add"){
-				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+season+"','"+dname+"','"+level+"','"+flood+"','"+wtype+"','"+submergedays+"','"+wind+"','"+velocity+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
+				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
 				alert("Save Successfully");
+				alert(user);
 			}else if(savemode=="edit"){
-				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', season='"+season+"', damagename='"+dname+"', flevel='"+level+"', flood='"+flood+"', watertype='"+wtype+"', submergeddays='"+submergedays+"', wind='"+wind+"', velocity='"+velocity+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
+				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', flevel='"+level+"', flood='"+flood+"',submergeddays='"+submergedays+"', wind='"+wind+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
 				$("#croplist").listview("refresh");
 				$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
 				var samp = $("#" + id).find("h2");
@@ -292,14 +327,10 @@ function refreshform(){
 							$("input:text[id=ffname]").val(dmgitem.firstname);
 							$("input:text[id=flname]").val(dmgitem.lastname);
 							$("input:text[id=faddress]").val(dmgitem.farmeraddress);
-							$('#season').find(":selected").text(dmgitem.season);
-							$("input:text[id=dname]").val(dmgitem.damagename);
 							$('#level').find(":selected").text(dmgitem.flevel);
 							$("input:checkbox[id=flood]").val(dmgitem.flood);
-							$('#wtype').find(":selected").text(dmgitem.watertype);
 							$('#submergedays').find(":selected").text(dmgitem.submergeddays);
 							$("input:checkbox[id=wind]").val(dmgitem.wind);
-							$('#velocity').find(":selected").text(dmgitem.velocity);
 							$('#exposure').find(":selected").text(dmgitem.exposure);
 							$('#ctype').find(":selected").text(dmgitem.ctype);
 							$('#ecosystem').find(":selected").text(dmgitem.ecosystem);
@@ -342,14 +373,10 @@ function refreshform(){
 							"<tr><td>Farmer Name</td><td>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</td></tr>"+
 							"<tr><td>Farmer Address (Purok/Sitio)</td><td>"+res.rows.item(x).farmeraddress+"</td></tr>"+
 							"<tr><td td colspan='2' class='title'>DAMAGE INFORMATION</td></tr>"+
-							"<tr><td>Season</td><td>"+res.rows.item(x).season+"</td></tr>"+
-							"<tr><td>Damage Name</td><td>"+res.rows.item(x).damagename+"</td></tr>"+
 							"<tr><td>Flood</td><td>"+res.rows.item(x).flood+"</td></tr>"+
 							"<tr><td>Flood Level (meter)</td><td>"+res.rows.item(x).flevel+"</td></tr>"+
-							"<tr><td>Water Type</td><td>"+res.rows.item(x).watertype+"</td></tr>"+
 							"<tr><td>Days of Submergence</td><td>"+res.rows.item(x).submergeddays+"</td></tr>"+
 							"<tr><td>Severe Wind</td><td>"+res.rows.item(x).wind+"</td></tr>"+
-							"<tr><td>Velocity</td><td>"+res.rows.item(x).velocity+"</td></tr>"+
 							"<tr><td>Period of Exposure</td><td>"+res.rows.item(x).exposure+"</td></tr>"+
 							"<tr><td td colspan='2' class='title'>CROP INFORMATION</td></tr>"+
 							"<tr><td>Crop Type</td><td>"+res.rows.item(x).ctype+"</td></tr>"+
@@ -423,25 +450,15 @@ function refreshform(){
 }//end of device ready
 
 function initDatabase() {
-	  db = window.sqlitePlugin.openDatabase({
+	db = window.sqlitePlugin.openDatabase({
 		  name: 'cdat_mobile.db',
-		  location: 'default',
-		  androidDatabaseImplementation:2,
-		  androidLockWorkaround:1
+		  location: 'default'
 		  });
-		//getting province name for select menu
-		db.transaction(function(txn){
-		txn.executeSql("SELECT distinct ProvName FROM GeoInfo ORDER BY ProvName ASC",[],function(txn,result){
-			$("#prov").html("<option value selected>Select Province</option>");
-			for(var x = 0; x < result.rows.length;x++){
-				$("#prov").append("<option value='"+result.rows.item(x).ProvName+"'>" + result.rows.item(x).ProvName + "</option>");
-			}
-			
-		});
-	},
-	function(e){
-		alert("Error: " + e.message)
-	});
+		 db.transaction(function(tx){
+			 tx.executeSql('CREATE TABLE if not exists CropDamage(CropdamageID INTEGER NOT NULL,latitude REAL, longitude REAL,provname TEXT,munname TEXT,bgyname TEXT,farmloc TEXT,ownername TEXT,farmarea TEXT,farmname TEXT,lastname TEXT,firstname TEXT,farmeraddress TEXT,flevel TEXT,flood TEXT,submergeddays TEXT,wind TEXT,exposure TEXT,ctype TEXT,ecosystem TEXT,sclass TEXT,stage TEXT,yieldbefore TEXT,yieldafter TEXT,partially TEXT,totally TEXT,remarks TEXT,photo1 TEXT,photo2 TEXT,surveyedby TEXT,datesurvey TEXT,timesurvey)');
+		 },function(e){
+			alert("ERROR:" + e.message)
+		}); 	
 		//reset the database
 		$("#reset").click(function(){
 			db.transaction(function(tx){
@@ -454,7 +471,7 @@ function initDatabase() {
 	}//end of database initialization
 	function savetocsv(){
 		$("#exportcsv").click(function(){
-		var expo = "CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,season,damagename,flevel,flood,watertype,submergeddays,wind,velocity,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey\n";
+		var expo = "CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,farmername,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey\n";
 		//alert(expo);
 		db.transaction(function(tx){
 			tx.executeSql("select * from CropDamage order by CropdamageID asc", [], function(tx,res){
@@ -470,17 +487,12 @@ function initDatabase() {
 							xdata.ownername+","+
 							xdata.farmarea+","+
 							xdata.farmname+","+
-							xdata.lastname+","+
-							xdata.firstname+","+
+							xdata.lastname+" "+xdata.firstname+","+
 							xdata.farmeraddress+","+
-							xdata.season+","+
-							xdata.damagename+","+
 							xdata.flevel+","+
 							xdata.flood+","+
-							xdata.watertype+","+
 							xdata.submergeddays+","+
 							xdata.wind+","+
-							xdata.velocity+","+
 							xdata.exposure+","+
 							xdata.ctype+","+
 							xdata.ecosystem+","+
