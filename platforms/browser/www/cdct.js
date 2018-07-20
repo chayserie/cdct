@@ -6,12 +6,49 @@ var id;
 var lat;
 var lng;
 var places;
+var user;
 var savemode="add";
-
+var places;
+//for login page
+$(document).ready(function(){
+	$.getJSON("places.json", function(places) {
+    console.log(places); // this will show the info 
+	});
+	$("#btnlogin").click(function(){
+		user = $("#user").val();
+		var id = user.substring(0,1);
+		user=user.substring(1);
+		if($("#remember").is(":checked")){
+			localStorage.setItem("id",user);
+		}
+		if(id == '#'){
+			alert("Your User ID is: "+ user);	
+			location = "index.html#menu";
+		}
+		else if (id != '#' && id != ''){
+			alert("Wrong User ID");
+		}
+	});
+	
+	$("#logout").click(function(){
+	localStorage.removeItem("id");
+	alert("Logged Out");
+	$.mobile.navigate("#login");
+	});
+});
 	//load when device is ready
 	document.addEventListener("deviceready",onDeviceReady,false);
 	
 	function onDeviceReady(){
+	user = localStorage.getItem("id");
+	console.log("user" + user);
+	if(user == "" || user == "undefined" || user == null){
+		alert("Please Enter User ID");
+	}
+	else if(user !== ""){
+		alert("welcome back  : " + user)
+		$.mobile.navigate("#menu")
+	}
 	watchID = navigator.geolocation.watchPosition(onSuccess, onError, {enableHighAccuracy:true});
 	datesurvey();
 	initDatabase();
@@ -36,8 +73,7 @@ var savemode="add";
 					
 					   var lt=$("#lat").val();
 						var lg=$("#lng").val();
-						var fname = lt+"_"+lg+"_"+imgID+".jpg";
-					   alert(fname);
+						var fname = user+'_'+lt+"_"+lg+"_"+imgID+".jpg";
 					   fileEntry.moveTo(imgDir,fname,function(){
 							image.setAttribute("data-filename",fname);
 							
@@ -123,13 +159,13 @@ function refreshform(){
 			}
 			if($("#faddr").prop('checked')){
 				var faddr = $("#farmloc").val();
-				$("#faddress").val(faddr);
+				$("#faddress").text(faddr);
 			}else{
 				$("#fadress").val("");
 			}
 			if($("#lowner").prop('checked')){
 				var lowner = $("#flname").val()+$("#ffname").val();
-				$("#owner").val(lowner);
+				$("#owner").text(lowner);
 			}else{
 				$("#owner").val("");
 			}
@@ -218,8 +254,9 @@ function refreshform(){
 			var sql="";
 
 			if(savemode=="add"){
-				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+"chay"+"','"+sdate+"','"+stime+"')";
+				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
 				alert("Save Successfully");
+				alert(user);
 			}else if(savemode=="edit"){
 				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', flevel='"+level+"', flood='"+flood+"',submergeddays='"+submergedays+"', wind='"+wind+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
 				$("#croplist").listview("refresh");
@@ -435,7 +472,7 @@ function initDatabase() {
 	}//end of database initialization
 	function savetocsv(){
 		$("#exportcsv").click(function(){
-		var expo = "CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey\n";
+		var expo = "CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,farmername,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey\n";
 		//alert(expo);
 		db.transaction(function(tx){
 			tx.executeSql("select * from CropDamage order by CropdamageID asc", [], function(tx,res){
@@ -451,8 +488,7 @@ function initDatabase() {
 							xdata.ownername+","+
 							xdata.farmarea+","+
 							xdata.farmname+","+
-							xdata.lastname+","+
-							xdata.firstname+","+
+							xdata.lastname+" "+xdata.firstname+","+
 							xdata.farmeraddress+","+
 							xdata.flevel+","+
 							xdata.flood+","+

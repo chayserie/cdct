@@ -13,6 +13,26 @@
         <title>REDAS CDCT</title>
     </head>
     <body>
+		<div data-role="page" id="login">
+				<div id="myheader" data-theme="a" data-role="header" data-position="fixed">
+					<h1 id="headertitle">LOG IN PAGE</h1>
+				</div>
+				<div data-role="main" class="ui-content">
+					<center>
+						<img id="logo" src="img/phivolcs.png"><br>
+						<h3 id="redas">REDAS - CDCT</h3>
+					</center>
+					<input type="text" name="user" id="user" placeholder="Please Enter Your User ID">
+					<button class="ui-button" id="btnlogin" data-theme="a">LOG IN</button>
+					<label>
+					<input type="checkbox" name="check" id="remember">Remember Me
+					</label>
+					<div data-theme="a" id="myfooter" data-role="footer" data-position="fixed">
+					<h1>REDAS - CDCT</h1>
+					</div>
+				</div>
+			</div> 
+	
 		<div data-role="page" id="menu">
 			<div data-theme="a" data-tap-toggle="false" data-role="header" data-position="fixed">
 				<h1>Crop Damage Capture Tool</h1>
@@ -26,12 +46,11 @@
 				<div class="ui-block-b"><div class="button-wrap" ><a href="#display"><button id="displaydata" class="btnmenu ui-shadow ui-icon-bullets ui-btn-icon-top ui-btn ui-corner-all" >Display Damage Data</button></a></div></div>
 			</div>
 			<div class="ui-grid-a">
-				<div class="ui-block-b"><div class="button-wrap" ><a href="#geolocation"><button class="btnmenu ui-shadow ui-icon-location ui-btn-icon-top ui-btn ui-corner-all">Geolocation</button></a></div></div>
 				<div class="ui-block-b"><div class="button-wrap" ><a href="#settings"><button class="btnmenu ui-shadow ui-icon-gear ui-btn-icon-top ui-btn ui-corner-all" >Settings</button></a></div></div>
-				
+				<div class="ui-block-b"><div class="button-wrap" ><a href="#export"><button class="btnmenu ui-shadow ui-icon-action ui-btn-icon-top ui-btn ui-corner-all" >Export</button></a></div></div>
 			</div>
 			<div class="ui-grid-a">
-				<div class="ui-block-b"><div class="button-wrap" ><a href="#export"><button class="btnmenu ui-shadow ui-icon-action ui-btn-icon-top ui-btn ui-corner-all" >Export</button></a></div></div>
+				<div class="ui-block-b"><div class="button-wrap" ><button id="logout" class="btnmenu ui-shadow ui-icon-power ui-btn-icon-top ui-btn ui-corner-all" style="color:red">Log Out</button></div></div>
 				<div class="ui-block-b"><div class="button-wrap" ><button id="quit" class="btnmenu ui-shadow ui-icon-power ui-btn-icon-top ui-btn ui-corner-all" style="color:red">Quit</button></div></div>
 				
 			</div>
@@ -231,19 +250,6 @@
 			<div data-role="main" class="ui-content">
 				<table id="croptable">
 				</table>
-			</div>
-		</div>
-		<div data-role="page" id="geolocation">
-			<div id="myheader" data-tap-toggle="false" data-theme="a" data-role="header" data-position="fixed">
-				<a href ="#menu" class="ui-btn ui-corner-all ui-icon-back">back</a>
-						<h1>geolocation</h1>
-				<a href="#menu" class="ui-btn ui-corner-all ui-icon-home" data-transition="pop">Home</a>
-			</div>
-			<div id="discontent">
-				<h1>content here!!!!!</h1>
-			</div>
-			<div id="myfooter" data-tap-toggle="false" data-role="footer" data-position="fixed">
-			<h2>REDAS - CDCT V1</h2>
 			</div>
 		</div>
 		<div data-role="page" id="settings">

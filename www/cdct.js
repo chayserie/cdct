@@ -164,7 +164,7 @@ function refreshform(){
 				$("#fadress").val("");
 			}
 			if($("#lowner").prop('checked')){
-				var lowner = $("#flname").val()+$("#ffname").val();
+				var lowner = $("#flname").val()+" "+$("#ffname").val();
 				$("#owner").val(lowner);
 			}else{
 				$("#owner").val("");
@@ -200,15 +200,15 @@ function refreshform(){
 			var pname1 = $("#t1").attr("data-filename");
 			var pname2 = $("#t2").attr("data-filename");
 			var isSaveOK = true;
-			if(lat==""){
+			
+			if(lng=="" && lat == ""){
 				isSaveOK=false;
-				$(".req1").addClass("req");
-				$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
+				alert("Please get Coordinates");
+				
 			}
-			if(lng==""){
-				isSaveOK=false;
-				$(".req1").addClass("req");
-				$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
+			if(farmarea < partially+totally){
+				isSaveOK = false;
+				alert("partially and totally damage should not be greater than farm area");
 			}
 			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
 			
@@ -233,18 +233,14 @@ function refreshform(){
 			if (ctype=="--Select Crop Type--"){
 				ctype="null"
 			}
-			if (ecosystem=="Select Ecosystem" || ecosystem == ""){
+			if (ecosystem=="--Select Ecosystem--" || ecosystem == ""){
 				ecosystem="null"
 			}
-			if (sclass=="Select Seed Class" || sclass == ""){
+			if (sclass=="--Select Seed Class--" || sclass == ""){
 				sclass="null"
 			}
 			if (stage=="--Select Stage--"){
 				stage="null"
-			}
-			
-			if(isSaveOK==false){
-			alert("Please get coordinates");
 			}
 		
 
@@ -258,11 +254,13 @@ function refreshform(){
 				alert("Save Successfully");
 				alert(user);
 			}else if(savemode=="edit"){
+				var pname1 = $("#t1").attr("data-filename");
+				var pname2 = $("#t2").attr("data-filename");
+				alert(pname1+"\n"+pname2);
 				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', flevel='"+level+"', flood='"+flood+"',submergeddays='"+submergedays+"', wind='"+wind+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
 				$("#croplist").listview("refresh");
 				$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
-				var samp = $("#" + id).find("h2");
-				alert(samp);
+				alert(pname1+pname2);
 				alert("update successfully");
 			}
 			savemode="add";
@@ -291,7 +289,7 @@ function refreshform(){
 			$(".editbutton").click(function(e){
 				 id = $(this).parent().attr("data-id");
 				var name = $(this).find("h2");
-				alert("Updating: " +id+name);
+				alert("Updating data: " +id);
 				//Create db transaction searching for the dmg id
 				db.transaction(function(tx){
 					tx.executeSql("select * from CropDamage where CropdamageID='"+id+"'",[],function(tx,res){
@@ -306,7 +304,6 @@ function refreshform(){
 											p2 = imgDir.toURL() + p2;
 											$("#t1").attr("src",p1);
 											$("#t2").attr("src",p2);
-											alert(p1+p2);
 										},function(e){
 											alert("Cant open images folder");
 										});
