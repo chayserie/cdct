@@ -128,7 +128,7 @@
 						<label for="flood">Flood</label>
 						Water Level (m)
 						<select id="level">
-							<option value="default">--Select Water Level-</option>
+							<option value="default">--Select Water Level--</option>
 							<option value="">1-2</option>
 							<option value="">3-4</option>
 							<option value="">5-6</option>
@@ -152,37 +152,44 @@
 							<option value="">>12</option></option>
 						</select>
 						<hr>
-					<h4>Crop Data</h4>
+					<form id="cropform">
+							<h4>Crop Data</h4>
 					Crop Type
 					<select id="ctype">
 						<option value="default">--Select Crop Type--</option>
 						<option value="rice">Rice</option>
 						<option value="corn">Corn</option>
 					</select>
-					Ecosystem
+					<label id = "ecotext">Ecosystem</label>
 					<select id="ecosystem">
 						<option value="default">--Select Ecosystem--</option>
 					</select>
-					Seed Class:
+					<label id="classtext">Corn Variety</label>
+					<select id="variety">
+					<option value="default">--Select Variety--</option>
+						<optgroup label="TRANSGENIC CORN">
+						<option value="bt">BT Corn</option>
+						<option value="bt">GT Corn</option>
+						</optgroup>
+						<option value="hybrid">Hybrid</option>
+						<optgroup label="OPEN POLLINATED VARIETY">
+						<option value="flint">Flint</option>
+						<option value="glutinous">Glutinous</option>
+						<option value="sweet">Sweet Corn</option>
+						</optgroup>
+						
+					</select>
+					<label id="classtext">Seed Class:</label>
 					<select id="sclass">
 						<option value="default">--Select Seed Class--</option>
 					</select>
-					Stage
+					<label id="stagetext">Stage</label>
 					<select id="stage">
-						<option value="default">--Select Stage--</option>
-						<option value = 'default'>Select Stage of Crop</option>
-						<option value = 'seedling'>Seedling</option>
-						<option value = 'tillering'>Tillering</option>
-						<option value = 'stem'>Stem Elongation</option>
-						<option value = 'booting'>Booting</option>
-						<option value = 'heading'>Heading</option>
-						<option value = 'flowering'>Flowering</option>
-						<option value = 'milking'>Milking</option>
-						<option value = 'dough'>Dough</option>
-						<option value = 'ripening'>Ripening</option>
+						
 					</select>
+					</form>
 					<hr>
-					<h4>Yield per Hectare (MT)<a href="#yloss" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a></h4>
+					<h4>Yield per Hectare (Kls)<a href="#yloss" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a></h4>
 					<div data-role="popup" id="yloss" class="ui-content" data-theme="a" style="max-width:350px;">
 					<p>Yield per hectare in metric tons</p>
 					</div>
@@ -197,12 +204,12 @@
 					</div>
 					<input type="number" id="yieldafter">
 					<h4>Area Affected (ha)</h4>
-					Partially Damage<a href="#partiallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
+					Partially Damaged<a href="#partiallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="partiallyinfo" class="ui-content" data-theme="a" style="max-width:350px;">
 					<p>refers to the actual partially damage field per hectare <strong>after</strong> the occurrence of the calamity</p>
 					</div>
 					<input type="number" id="partially">
-					Totally Damage<a href="#totallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
+					Totally Damaged<a href="#totallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="totallyinfo" class="ui-content" data-theme="a" style="max-width:350px;">
 					<p>refers to the actual totally damage field per hectare <strong>after</strong> the occurrence of the calamity</p>
 					</div>

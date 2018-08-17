@@ -12,7 +12,7 @@ var places;
 //for login page
 $(document).ready(function(){
 	$.getJSON("places.json", function(places) {
-    console.log(places); // this will show the info 
+    console.log(places); // this will show the places 
 	});
 	$("#btnlogin").click(function(){
 		user = $("#user").val();
@@ -130,6 +130,8 @@ function refreshform(){
 	$("select option").removeAttr("selected");
 	$("select").selectmenu("refresh",true);
     $('input[type=checkbox]').prop('checked', false).checkboxradio('refresh');
+	
+	
 		
 }
 		
@@ -139,6 +141,7 @@ function refreshform(){
 	$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
 	$("#addheader").text("Add Crop Damage Data");
 	$("#btnsave").text("Save Data");
+	
 	//refresh form
 	refreshform();
 });
@@ -157,18 +160,7 @@ function refreshform(){
 			}else{
 				value="false"; 
 			}
-			if($("#faddr").prop('checked')){
-				var faddr = $("#farmloc").val();
-				$("#faddress").val(faddr);
-			}else{
-				$("#fadress").val("");
-			}
-			if($("#lowner").prop('checked')){
-				var lowner = $("#flname").val()+" "+$("#ffname").val();
-				$("#owner").val(lowner);
-			}else{
-				$("#owner").val("");
-			}
+		
 			lat = $("input:text[id=lat]").val();
 			lng= $("input:text[id=lng]").val();
 				alert(lat+" "+lng);
@@ -176,13 +168,13 @@ function refreshform(){
 			var prov = $("#prov").find(":selected").text();
 			var muni = $("#muni").find(":selected").text();
 			var brgy = $("#brgy").find(":selected").text();
-			var farmloc = $('input:text[id=farmloc]').val();
-			var owner = $('input:text[id=owner]').val();
+			var farmloc = $('input:text[id=farmloc]').val().toString().replace(/,/g, "");
+			var owner = $('input:text[id=owner]').val().toString().replace(/,/g, "");
 			var farmarea = $("#farea").val();
-			var frname = $('input:text[id=frname]').val();
-			var flastname = $('input:text[id=flname]').val();
-			var ffname = $('input:text[id=ffname]').val();
-			var faddress = $('input:text[id=faddress]').val();
+			var frname = $('input:text[id=frname]').val().toString().replace(/,/g, "");
+			var flastname = $('input:text[id=flname]').val().toString().replace(/,/g, "");
+			var ffname = $('input:text[id=ffname]').val().toString().replace(/,/g, "");
+			var faddress = $('input:text[id=faddress]').val().toString().replace(/,/g, "");
 			var flood = $('#flood').prop("checked");
 			var level = $("#level").find(":selected").text();
 			var submergedays = $("#submergedays").find(":selected").text();
@@ -190,25 +182,25 @@ function refreshform(){
 			var exposure = $("#exposure").find(":selected").text();
 			var ctype = $("#ctype").find(":selected").text();
 			var ecosystem = $("#ecosystem").find(":selected").text();
+			var variety = $("#variety").find(":selected").text();
 			var sclass = $("#sclass").find(":selected").text();
 			var stage = $("#stage").find(":selected").text();
-			var yieldbefore = $('#yieldbefore').val();
-			var yieldafter = $('#yieldafter').val();
-			var partially = $('#partially').val();
-			var totally = $('#totally').val();
-			var remarks = $('#remarks').val();
+			var yieldbefore = $('#yieldbefore').val().toString().replace(/,/g, "");
+			var yieldafter = $('#yieldafter').val().toString().replace(/,/g, "");
+			var partially = $('#partially').val().toString().replace(/,/g, "");
+			var totally = $('#totally').val().toString().replace(/,/g, "");
+			var remarks = $('#remarks').val().toString().replace(/,/g, "");
 			var pname1 = $("#t1").attr("data-filename");
 			var pname2 = $("#t2").attr("data-filename");
 			var isSaveOK = true;
 			
 			if(lng=="" && lat == ""){
 				isSaveOK=false;
-				alert("Please get Coordinates");
-				
+				alert("Please get Coordinates");	
 			}
-			if(farmarea < partially+totally){
-				isSaveOK = false;
-				alert("partially and totally damage should not be greater than farm area");
+			
+			if(totally > farmarea){
+				alert("Totally damaged area must not be greater than Farm Area!");
 			}
 			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
 			
@@ -221,7 +213,7 @@ function refreshform(){
 			if (brgy=="Select Barangay"){
 				brgy="null"
 			}
-			if (level=="--Select Water Level-"){
+			if (level=="--Select Water Level--"){
 				level="null"
 			}
 			if (submergedays=="--Select Days of Submergence--"){
@@ -236,10 +228,13 @@ function refreshform(){
 			if (ecosystem=="--Select Ecosystem--" || ecosystem == ""){
 				ecosystem="null"
 			}
+			if (variety=="--Select Variety--" || variety == ""){
+				variety="null"
+			}
 			if (sclass=="--Select Seed Class--" || sclass == ""){
 				sclass="null"
 			}
-			if (stage=="--Select Stage--"){
+			if (stage=="--Select Stage--" || stage == ""){
 				stage="null"
 			}
 		
@@ -250,14 +245,14 @@ function refreshform(){
 			var sql="";
 
 			if(savemode=="add"){
-				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
+				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,variety,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+variety+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
 				alert("Save Successfully");
 				alert(user);
 			}else if(savemode=="edit"){
 				var pname1 = $("#t1").attr("data-filename");
 				var pname2 = $("#t2").attr("data-filename");
 				alert(pname1+"\n"+pname2);
-				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', flevel='"+level+"', flood='"+flood+"',submergeddays='"+submergedays+"', wind='"+wind+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
+				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', flevel='"+level+"', flood='"+flood+"',submergeddays='"+submergedays+"', wind='"+wind+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', variety='"+variety+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
 				$("#croplist").listview("refresh");
 				$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
 				alert(pname1+pname2);
@@ -332,6 +327,7 @@ function refreshform(){
 							$('#exposure').find(":selected").text(dmgitem.exposure);
 							$('#ctype').find(":selected").text(dmgitem.ctype);
 							$('#ecosystem').find(":selected").text(dmgitem.ecosystem);
+							$('#variety').find(":selected").text(dmgitem.variety);
 							$('#sclass').find(":selected").text(dmgitem.sclass);
 							$('#stage').find(":selected").text(dmgitem.stage);
 							$("#yieldbefore").val(dmgitem.yieldbefore);
@@ -379,6 +375,7 @@ function refreshform(){
 							"<tr><td td colspan='2' class='title'>CROP INFORMATION</td></tr>"+
 							"<tr><td>Crop Type</td><td>"+res.rows.item(x).ctype+"</td></tr>"+
 							"<tr><td>Ecosystem</td><td>"+res.rows.item(x).ecosystem+"</td></tr>"+
+							"<tr><td>Variety</td><td>"+res.rows.item(x).variety+"</td></tr>"+
 							"<tr><td>Seed Class</td><td>"+res.rows.item(x).sclass+"</td></tr>"+
 							"<tr><td>Stage</td><td>"+res.rows.item(x).stage+"</td></tr>"+
 							"<tr><td td colspan='2' class='title'>YIELD LOSSES</td></tr>"+
@@ -453,7 +450,7 @@ function initDatabase() {
 		  location: 'default'
 		  });
 		 db.transaction(function(tx){
-			 tx.executeSql('CREATE TABLE if not exists CropDamage(CropdamageID INTEGER NOT NULL,latitude REAL, longitude REAL,provname TEXT,munname TEXT,bgyname TEXT,farmloc TEXT,ownername TEXT,farmarea TEXT,farmname TEXT,lastname TEXT,firstname TEXT,farmeraddress TEXT,flevel TEXT,flood TEXT,submergeddays TEXT,wind TEXT,exposure TEXT,ctype TEXT,ecosystem TEXT,sclass TEXT,stage TEXT,yieldbefore TEXT,yieldafter TEXT,partially TEXT,totally TEXT,remarks TEXT,photo1 TEXT,photo2 TEXT,surveyedby TEXT,datesurvey TEXT,timesurvey)');
+			 tx.executeSql('CREATE TABLE if not exists CropDamage(CropdamageID INTEGER NOT NULL,latitude REAL, longitude REAL,provname TEXT,munname TEXT,bgyname TEXT,farmloc TEXT,ownername TEXT,farmarea TEXT,farmname TEXT,lastname TEXT,firstname TEXT,farmeraddress TEXT,flevel TEXT,flood TEXT,submergeddays TEXT,wind TEXT,exposure TEXT,ctype TEXT,ecosystem TEXT,variety TEXT,sclass TEXT,stage TEXT,yieldbefore TEXT,yieldafter TEXT,partially TEXT,totally TEXT,remarks TEXT,photo1 TEXT,photo2 TEXT,surveyedby TEXT,datesurvey TEXT,timesurvey)');
 		 },function(e){
 			alert("ERROR:" + e.message)
 		}); 	
@@ -469,7 +466,7 @@ function initDatabase() {
 	}//end of database initialization
 	function savetocsv(){
 		$("#exportcsv").click(function(){
-		var expo = "CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,farmername,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey\n";
+		var expo = "CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,farmername,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,variety,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey\n";
 		//alert(expo);
 		db.transaction(function(tx){
 			tx.executeSql("select * from CropDamage order by CropdamageID asc", [], function(tx,res){
@@ -494,6 +491,7 @@ function initDatabase() {
 							xdata.exposure+","+
 							xdata.ctype+","+
 							xdata.ecosystem+","+
+							xdata.variety+","+
 							xdata.sclass+","+
 							xdata.stage+","+
 							xdata.yieldbefore+","+
@@ -630,7 +628,6 @@ function onError(error){
 
 
 $(document).ready(function () {
-	
 	$("#coordsave").click(function(){
 		var lat = $('input:text[id=clat]').val();
 		var lng = $('input:text[id=clng]').val();
@@ -638,28 +635,82 @@ $(document).ready(function () {
 		$("#lng").val(lng);
 		$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
 		});
+		//if partially has value, disabled totally.
+		$("#partially").change(function(){
+			if($(this).val() !="" || $(this).val().length > 0){
+				$("#totally").attr("disabled","disabled");
+			}
+			else{
+				$("#totally").removeAttr("disabled");
+			}
+		});
+		//if totally has value, disabled partially
+		$("#totally").change(function(){
+			if($(this).val() !="" || $(this).val().length > 0){
+				$("#partially").attr("disabled","disabled");
+			}
+			else{
+				$("#partially").removeAttr("disabled");
+			}
+		});
+		$("#faddr").click(function(){
+			if($(this).prop('checked')){
+				$("#faddress").val($("#farmloc").val());
+			}
+			else{
+				$("#faddress").val("null");
+			}
+		});
+		
+		$("#lowner").click(function(){
+			if($(this).prop('checked')){
+				$("#owner").val($("#ffname").val()+" "+$("#flname").val());
+			}
+			else{
+				$("#owner").val("null");
+			}
+		});
+			
+			
 	
 		$("#ctype").change(function(){
 			var ctype=$("#ctype").val();
 			var ecosystem = $("#ecosystem");
+			var stage = $("#stage");
 			if(ctype=="rice"){
+			document.getElementById('variety').setAttribute('disabled', true);
+				$("#ecotext").text("Ecosystem");
 				$(ecosystem).html("<option value='default'>--Select Ecosystem--</option><option value='inbred'>Irrigated - Inbred</option><option value='hybrid'>Irrigated - Hybrid</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
+				
+				//to load stages of rice
+				$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value = 'seedling'>Seedling</option><option value = 'tillering'>Tillering</option><option value = 'stem'>Stem Elongation</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value = 'booting'>Booting</option><option value = 'heading'>Heading</option><option value = 'flowering'>Flowering</option></optgroup><optgroup label='MATURITY'><option value = 'milking'>Milking</option><option value = 'dough'>Dough</option><option value = 'ripening'>Ripening</option></optgroup>");
 			}
 			else{
-				$(ecosystem).html("<option value='default'>--Select Ecosystem--</option><option value='irrigated'>Irrigated</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
+				  document.getElementById('variety').removeAttribute('disabled');
+				$("#ecotext").text("Topography");
+				$(ecosystem).html("<option value='default'>--Select Topography--</option><option value='upland'>Upland</option><option value='lowland'>Lowland</option>");
+				$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option><option value='registered'>Registered Seed</option>");
+				
+				$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value='emergence'>Emergence</option><option value='first'>First Leaf Collar</option><option value='second'>Second Leaf Collar</option><option value='third'>Third Leaf Collar</option><option value='nth'>Nth Leaf Collar</option><option value='tassel'>Tasseling</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value='silking'>Silking</option><option value='blister'>Blister</option><option value='milking'>Milking</option><option value='dough'>Dough</option><option value='dent'>Dent</option><option value='maturity'>Maturity</option></optgroup>");
+				
 			}
 			
 			$("#ecosystem option").removeAttr("selected");
+			$("#stage").selectmenu("refresh",true);
+			$("#stage option").removeAttr("selected");
 			$("#ecosystem").selectmenu("refresh",true);
-		
+			$("#variety option").removeAttr("selected");
+			$("#variety").selectmenu("refresh",true);
+			$("#sclass option").removeAttr("selected");
+			$("#sclass").selectmenu("refresh",true);
 		});
 	
 		$("#ecosystem").change(function(){
 		 var ecosystem = $("#ecosystem").val();
 		 var sclass=$("#sclass");
-			if(ecosystem == "inbred"){
+			if(ecosystem == "inbred" || ecosystem=="lowland" || ecosystem=="upland"){
 				$(sclass).val("");
-				$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option><option value='registered'>Registered Seed</option>");
+				$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='registered'>Registered Seed</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option>");
 			}
 			else{
 				$(sclass).html("<option value='default'>--Select Seed Class--</option>");
