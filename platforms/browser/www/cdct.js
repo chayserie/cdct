@@ -5,15 +5,81 @@ var watchID;
 var id;
 var lat;
 var lng;
-var places;
 var user;
+var places=[];
 var savemode="add";
-var places;
 //for login page
 $(document).ready(function(){
-	$.getJSON("places.json", function(places) {
-    console.log(places); // this will show the places 
+	//load brgys
+		//Load Brgys
+	$.getJSON("places.json",function(data){
+		console.log(data);
+		places = data;
+		var provinces = [];
+		for(i=0; i<places.places.length; i++){
+			if(!provinces.includes(places.places[i].Pro_Name)){
+				provinces.push(places.places[i].Pro_Name);
+				console.log("added: " + places.places[i].Pro_Name);
+			}
+		}
+
+		provinces.sort();
+		console.log("Sorted Provinces: ");
+		console.log(provinces);
+		for(i=0; i< provinces.length; i++){
+			$("#prov").append("<option>" + provinces[i] + "</option>");
+		}
 	});
+
+	$("#prov").change(function(){
+		var sProv = $("#prov option:selected").val();
+		console.log("Changed to province: " + sProv);
+		//change muni
+		var muni = [];
+		for(i=0; i<places.places.length; i++){
+			if(places.places[i].Pro_Name==sProv){
+				if(!muni.includes(places.places[i].Mun_Name)){
+					muni.push(places.places[i].Mun_Name);
+					console.log("added: " + places.places[i].Mun_Name);
+				}
+			}
+		}
+
+		muni.sort();
+		//clear muni
+		$("#muni").html("");
+		for(i=0; i< muni.length; i++){
+			$("#muni").append("<option>" + muni[i] + "</option>");
+		}
+	});
+
+	$("#muni").change(function(){
+		var sProv = $("#prov option:selected").val();
+		var sMuni = $("#muni option:selected").val();
+
+		console.log("Changed to province: " + sProv);
+		console.log("Changed to muni: " + sMuni);
+		var brgy = [];
+		for(i=0; i<places.places.length; i++){
+			if(places.places[i].Pro_Name==sProv){
+				if(places.places[i].Mun_Name==sMuni){
+					if(!brgy.includes(places.places[i].Bgy_Name)){
+						brgy.push(places.places[i].Bgy_Name);
+						console.log("added: " + places.places[i].Bgy_Name);
+					}
+				}
+			}
+		}
+
+		brgy.sort();
+		//clear muni
+		$("#brgy").html("");
+		for(i=0; i< brgy.length; i++){
+			$("#brgy").append("<option>" + brgy[i] + "</option>");
+		}
+	});
+
+	
 	$("#btnlogin").click(function(){
 		user = $("#user").val();
 		var id = user.substring(0,1);
