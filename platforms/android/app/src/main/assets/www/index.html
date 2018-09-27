@@ -62,7 +62,7 @@
 		<!---------------Form for Rice Damage Data------------------>
 		<div data-role="page" id="add">
 			<div id="myheader" data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" data-hide-during-focus="" >
-			<a href ="#menu" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-back"></a>
+			<a href ="#menu" id="ebtnbck" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-back"></a>
 					<h2 id="addheader"></h2>
 			<a href="#menu" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-home" data-transition="pop"></a>		
 			</div>
@@ -89,16 +89,16 @@
 					Longitude:
 					<input disabled type="text" class="req" id="lng" style="color:red";>
 					Province Name:
-					<select id="prov">
-						<option value = 'default'>Select Province Name</option>
+					<select id="prov"><span class="req1">aeffw</span>
+						<option value="default">Select Province Name</option>
 					</select>
 					Municipality Name:
 					<select id="muni">
-						<option value = 'default'>Select Municipality</option>
+						<option value="default">Select Municipality</option>
 					</select>
 					Barangay Name:
 					<select id="brgy">
-						<option value = 'default'>Select Barangay</option>
+						<option value="default">Select Barangay</option>
 					</select>
 					Farm Location(Sitio/Purok):
 					<input type="text" name="farmloc" id="farmloc" placeholder="Farm Location">
@@ -129,27 +129,27 @@
 						Water Level (m)
 						<select id="level">
 							<option value="default">--Select Water Level--</option>
-							<option value="">1-2</option>
-							<option value="">3-4</option>
-							<option value="">5-6</option>
-							<option value="">7-8</option>
-							<option value=""> >=9</option>
+							<option value="1-2">1-2</option>
+							<option value="3-4">3-4</option>
+							<option value="5-6">5-6</option>
+							<option value="7-8">7-8</option>
+							<option value=">=9">>=9</option>
 						</select><br>
 						Days of Submergence:
 						<select id="submergedays">
 							<option value="default">--Select Days of Submergence--</option>
-							<option value="">1-2</option>
-							<option value="">3-4</option>
-							<option value="">5-6</option>
-							<option value="">7</option>
+							<option value="1-2">1-2</option>
+							<option value="3-4">3-4</option>
+							<option value="5-6">5-6</option>
+							<option value="7">7</option>
 						</select><br>
 						<input type="checkbox" name="wind" id="wind">
 						<label for="wind">Severe Wind</label>
 						Period of Exposure (Hours):
 						<select id="exposure">
 							<option value="default">--Select Period of Exposure--</option>
-							<option value=""><=12</option>
-							<option value="">>12</option></option>
+							<option value="<=12"><=12</option>
+							<option value=">12">>12</option></option>
 						</select>
 						<hr>
 					<form id="cropform">
@@ -157,8 +157,8 @@
 					Crop Type
 					<select id="ctype">
 						<option value="default">--Select Crop Type--</option>
-						<option value="rice">Rice</option>
-						<option value="corn">Corn</option>
+						<option value="Rice">Rice</option>
+						<option value="Corn">Corn</option>
 					</select>
 					<label id = "ecotext">Ecosystem</label>
 					<select id="ecosystem">
@@ -168,14 +168,14 @@
 					<select id="variety">
 					<option value="default">--Select Variety--</option>
 						<optgroup label="TRANSGENIC CORN">
-						<option value="bt">BT Corn</option>
-						<option value="bt">GT Corn</option>
+						<option value="BT-Corn">BT-Corn</option>
+						<option value="GT-Corn">GT-Corn</option>
 						</optgroup>
-						<option value="hybrid">Hybrid</option>
+						<option value="Hybrid">Hybrid</option>
 						<optgroup label="OPEN POLLINATED VARIETY">
-						<option value="flint">Flint</option>
-						<option value="glutinous">Glutinous</option>
-						<option value="sweet">Sweet Corn</option>
+						<option value="Flint">Flint</option>
+						<option value="Glutinous">Glutinous</option>
+						<option value="Sweet-Corn">Sweet-Corn</option>
 						</optgroup>
 						
 					</select>
@@ -240,7 +240,7 @@
 			</div>
 			<div data-role="controlgroup" id="discontent">
 			<br>
-				<ul data-role="listview" id="croplist" data-autodividers="true" data-filter="true" data-inset="true"data-split-icon="edit" data-theme="b" data-split-theme="a" data-inset="true">
+				<ul data-role="listview" id="croplist"  data-filter="true" data-inset="true"data-split-icon="edit" data-theme="b" data-split-theme="a" data-inset="true">
 				</ul>
 				
 			</div>

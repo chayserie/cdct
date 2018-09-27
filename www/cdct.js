@@ -10,11 +10,37 @@ var places=[];
 var savemode="add";
 //for login page
 $(document).ready(function(){
-	//load brgys
-		//Load Brgys
+	//log in and cached the data and store in local storage,make sure it start with #,otherwise it returns an error.
+	$("#btnlogin").click(function(){
+		user = $("#user").val();
+		var id = user.substring(0,1);
+		user=user.substring(1);
+		if($("#remember").is(":checked")){
+			localStorage.setItem("id",user);
+		}
+		if(id == '#'){
+			alert("Your User ID is: "+ user);	
+			location = "index.html#menu";
+		}
+		else if (id != '#' && id != ''){
+			alert("Wrong User ID");
+		}
+	});
+	
+	//for log out function
+	
+	$("#logout").click(function(){
+	localStorage.removeItem("id");
+	alert("Logged Out");
+	$.mobile.navigate("#login");
+	});
+	
+	//Load places.json which handles the barangays,munis and prov data of the philippines
+	
 	$.getJSON("places.json",function(data){
 		console.log(data);
 		places = data;
+		//get the distinct value of province in each arrays
 		var provinces = [];
 		for(i=0; i<places.places.length; i++){
 			if(!provinces.includes(places.places[i].Pro_Name)){
@@ -22,15 +48,16 @@ $(document).ready(function(){
 				console.log("added: " + places.places[i].Pro_Name);
 			}
 		}
-
+		//sort provinces alphabetically and put the data in select box
 		provinces.sort();
 		console.log("Sorted Provinces: ");
 		console.log(provinces);
 		for(i=0; i< provinces.length; i++){
 			$("#prov").append("<option>" + provinces[i] + "</option>");
 		}
+		
 	});
-
+	//if change in province name, load the municipality of the chosen province
 	$("#prov").change(function(){
 		var sProv = $("#prov option:selected").val();
 		console.log("Changed to province: " + sProv);
@@ -48,11 +75,14 @@ $(document).ready(function(){
 		muni.sort();
 		//clear muni
 		$("#muni").html("");
+		$("#muni").append("<option value = 'default'>Select Municipality</option>")
 		for(i=0; i< muni.length; i++){
 			$("#muni").append("<option>" + muni[i] + "</option>");
 		}
+		$("#muni option").removeAttr("selected");
+		$("#muni").selectmenu("refresh",true);
 	});
-
+	//if muni has change load the list of barangays of the chosen municipality.
 	$("#muni").change(function(){
 		var sProv = $("#prov option:selected").val();
 		var sMuni = $("#muni option:selected").val();
@@ -74,38 +104,114 @@ $(document).ready(function(){
 		brgy.sort();
 		//clear muni
 		$("#brgy").html("");
+		$("#brgy").append("<option value = 'default'>Select Barangay</option>")
 		for(i=0; i< brgy.length; i++){
 			$("#brgy").append("<option>" + brgy[i] + "</option>");
 		}
-	});
-
-	
-	$("#btnlogin").click(function(){
-		user = $("#user").val();
-		var id = user.substring(0,1);
-		user=user.substring(1);
-		if($("#remember").is(":checked")){
-			localStorage.setItem("id",user);
-		}
-		if(id == '#'){
-			alert("Your User ID is: "+ user);	
-			location = "index.html#menu";
-		}
-		else if (id != '#' && id != ''){
-			alert("Wrong User ID");
-		}
+		$("#brgy option").removeAttr("selected");
+		$("#brgy").selectmenu("refresh",true);
 	});
 	
-	$("#logout").click(function(){
-	localStorage.removeItem("id");
-	alert("Logged Out");
-	$.mobile.navigate("#login");
+	//to get the recorded coordinates and put it in textbox
+	$("#coordsave").click(function(){
+		var lat = $('input:text[id=clat]').val();
+		var lng = $('input:text[id=clng]').val();
+		$("#lat").val(lat);
+		$("#lng").val(lng);
+		$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
 	});
+	//if partially has value, disabled totally.
+	$("#partially").change(function(){
+		if($(this).val() !="" || $(this).val().length > 0){
+			$("#totally").attr("disabled","disabled");
+		}
+		else{
+			$("#totally").removeAttr("disabled");
+		}
+	});
+	//if totally has value, disabled partially
+	$("#totally").change(function(){
+		if($(this).val() !="" || $(this).val().length > 0){
+			$("#partially").attr("disabled","disabled");
+		}
+		else{
+			$("#partially").removeAttr("disabled");
+		}
+	});
+	//check if the value of farm address same as the farmer address //
+	$("#faddr").click(function(){
+		if($(this).prop('checked')){
+			$("#faddress").val($("#farmloc").val());
+		}
+		else{
+			$("#faddress").val("null");
+		}
+	});
+	
+	//check if the value of owner is the same as the value of land owner
+	$("#lowner").click(function(){
+		if($(this).prop('checked')){
+			$("#owner").val($("#ffname").val()+" "+$("#flname").val());
+		}
+		else{
+			$("#owner").val("null");
+		}
+	});
+	
+	//for the manipulation of crop type,classes and stage
+	$("#ctype").change(function(){
+		var ctype=$("#ctype").val();
+		var ecosystem = $("#ecosystem");
+		var stage = $("#stage");
+		if(ctype=="Rice"){
+		document.getElementById('variety').setAttribute('disabled', true);
+			$("#ecotext").text("Ecosystem");
+			//load ecosystem for rice
+			$(ecosystem).html("<option value='default'>--Select Ecosystem--</option><option value='Irrigated-Inbred'>Irrigated-Inbred</option><option value='Irrigated-Hybrid'>Irrigated-Hybrid</option><option value='Rainfed'>Rainfed</option><option value='Upland'>Upland</option>");
+			
+			//to load stages of rice
+			$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value = 'Seedling'>Seedling</option><option value = 'Tillering'>Tillering</option><option value = 'Stem-Elongation'>Stem-Elongation</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value = 'Booting'>Booting</option><option value = 'Heading'>Heading</option><option value = 'Flowering'>Flowering</option></optgroup><optgroup label='MATURITY'><option value = 'Milking'>Milking</option><option value = 'Dough'>Dough</option><option value = 'Ripening'>Ripening</option></optgroup>");
+		}
+		else{
+			//for corn
+			document.getElementById('variety').removeAttribute('disabled');
+			$("#ecotext").text("Topography");
+			$(ecosystem).html("<option value='default'>--Select Topography--</option><option value='Upland'>Upland</option><option value='Lowland'>Lowland</option>");
+			$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='Certified-Seed'>Certified-Seed</option><option value='Good-Seed'>Good-Seed</option><option value='Registered-Seed'>Registered-Seed</option>");
+			
+			$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value='Emergence'>Emergence</option><option value='First-Leaf-Collar'>First-Leaf-Collar</option><option value='Second-Leaf-Collar'>Second-Leaf-Collar</option><option value='Third-Leaf-Collar'>Third-Leaf-Collar</option><option value='Nth-Leaf-Collar'>Nth-Leaf-Collar</option><option value='Tasseling'>Tasseling</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value='Silking'>Silking</option><option value='Blister'>Blister</option><option value='Milking'>Milking</option><option value='Dough'>Dough</option><option value='Dent'>Dent</option><option value='Maturity'>Maturity</option></optgroup>");
+			
+		}
+		
+		$("#ecosystem option").removeAttr("selected");
+		$("#ecosystem").selectmenu("refresh",true);
+		$("#stage").selectmenu("refresh",true);
+		$("#stage option").removeAttr("selected");
+		$("#variety option").removeAttr("selected");
+		$("#variety").selectmenu("refresh",true);
+		$("#sclass option").removeAttr("selected");
+		$("#sclass").selectmenu("refresh",true);
+	});
+	
+	$("#ecosystem").change(function(){
+	 var ecosystem = $("#ecosystem").val();
+	 var sclass=$("#sclass");
+		if(ecosystem == "Irrigated-Inbred" || ecosystem=="Lowland" || ecosystem=="Upland"){
+			$(sclass).val("");
+			$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='Registered-Seed'>Registered-Seed</option><option value='Certified-Seed'>Certified-Seed</option><option value='Good-Seed'>Good-Seed</option>");
+		}
+		else{
+			$(sclass).html("<option value='default'>--Select Seed Class--</option>");
+		}
+		$("#sclass option").removeAttr("selected");
+		$("#sclass").selectmenu("refresh",true);
+	});	
 });
-	//load when device is ready
-	document.addEventListener("deviceready",onDeviceReady,false);
+
+//load when device is ready
+document.addEventListener("deviceready",onDeviceReady,false);
 	
-	function onDeviceReady(){
+function onDeviceReady(){
 	user = localStorage.getItem("id");
 	console.log("user" + user);
 	if(user == "" || user == "undefined" || user == null){
@@ -115,74 +221,79 @@ $(document).ready(function(){
 		alert("welcome back  : " + user)
 		$.mobile.navigate("#menu")
 	}
+	
+	//watch gps position update every second 5meters accuracy
 	watchID = navigator.geolocation.watchPosition(onSuccess, onError, {enableHighAccuracy:true});
 	datesurvey();
 	initDatabase();
+	
 	$("#quit").click(function(){
 		navigator.app.exitApp();
 	});
+	
   	$("#c1").click(startcam);
 	$("#c2").click(startcam);
+	
 	function startcam(){
-	var imgID = this.getAttribute("data-target");
-	navigator.camera.getPicture(onSuccess,onFail,{quality:50,destinationType:Camera.DestinationType.FILE_URI, correctOrientation:true});
-	function onSuccess(imageURI){
-		var image = document.getElementById(imgID);
-		image.src=imageURI;
-		
-		//move the picture to folder
-		
-		window.resolveLocalFileSystemURL(imageURI,function(fileEntry){
-			window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
-				fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
-					CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
-					
-					   var lt=$("#lat").val();
-						var lg=$("#lng").val();
-						var fname = user+'_'+lt+"_"+lg+"_"+imgID+".jpg";
-					   fileEntry.moveTo(imgDir,fname,function(){
-							image.setAttribute("data-filename",fname);
-							
+		var imgID = this.getAttribute("data-target");
+		navigator.camera.getPicture(onSuccess,onFail,{quality:50,destinationType:Camera.DestinationType.FILE_URI, correctOrientation:true});
+		function onSuccess(imageURI){
+			var image = document.getElementById(imgID);
+			image.src=imageURI;
+			
+			//move the picture to folder
+			
+			window.resolveLocalFileSystemURL(imageURI,function(fileEntry){
+				window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
+					fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
+						CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+						
+						   var lt=$("#lat").val();
+							var lg=$("#lng").val();
+							var fname = user+'_'+lt+"_"+lg+"_"+imgID+".jpg";
+						   fileEntry.moveTo(imgDir,fname,function(){
+								image.setAttribute("data-filename",fname);
+								
+							},function(e){
+								alert("Cant move picture");
+							});
 						},function(e){
-							alert("Cant move picture");
+							alert("Cant open images folder");
 						});
 					},function(e){
-						alert("Cant open images folder");
+						alert("Cant open CDCT Folder");
 					});
 				},function(e){
-					alert("Cant open CDCT Folder");
+					alert("Cant open CDCT File System")
 				});
 			},function(e){
-				alert("Cant open CDCT File System")
-			});
-		},function(e){
-			alert("Cant find picture file");
-		})
-		
-	}
+				alert("Cant find picture file");
+			})
+			
+		}
 
-	function onFail(e){
-		alert("Failed because: " + e);
+		function onFail(e){
+			alert("Failed because: " + e);
+		}
 	}
-}
 function getPictureUrl(fname,imgID){
 //alert("getPictureUrl fname: " + fname);
 //alert("getPictureUrl imgID: " + imgID);
-window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
-	fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
-		CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
-		   imgDir.getFile(fname,{create:false,exclusive:false},function(imgFileEntry){
-			   $("#" + imgID).attr("src",imgFileEntry.toURL());
-		   });
+	window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
+		fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
+			CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+			   imgDir.getFile(fname,{create:false,exclusive:false},function(imgFileEntry){
+				   $("#" + imgID).attr("src",imgFileEntry.toURL());
+			   });
+			},function(e){
+				alert("Cant open images folder");
+			});
 		},function(e){
-			alert("Cant open images folder");
+			alert("Cant open CDCT Folder");
 		});
 	},function(e){
-		alert("Cant open CDCT Folder");
+		alert("Cant open CDCT File System")
 	});
-},function(e){
-	alert("Cant open CDCT File System")
-});
 }
 
 function refreshform(){
@@ -192,30 +303,24 @@ function refreshform(){
 	$("#t1").attr('data-filename', '');
 	$("#t2").attr('data-filename', '');
 	$("#add input[type=text]").val("");
-	$("#prov").val("Select Province");
-	$("#muni").val("Select Municipality");
-	$("#brgy").val("Select Barangay");	
 	$("#add input[type=number]").val("");
+	$("#remarks").val("");
+    $('input[type=checkbox]').prop('checked', false).checkboxradio('refresh');
 	$("select option").removeAttr("selected");
 	$("select").selectmenu("refresh",true);
-    $('input[type=checkbox]').prop('checked', false).checkboxradio('refresh');
-	
-	
-		
+	$("#myheader a").removeClass("ui-disabled");
 }
 		
  $("#addcrop").click(function(){
 	$.mobile.navigate("#add");
 	savemode = "add";
-	$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
 	$("#addheader").text("Add Crop Damage Data");
 	$("#btnsave").text("Save Data");
-	
-	//refresh form
-	refreshform();
+  refreshform();
+  
 });
 
-	$("#btnsave").click(function(){
+$("#btnsave").click(function(){
 		datesurvey();
 		db.transaction(function(tx){
 			
@@ -232,7 +337,6 @@ function refreshform(){
 		
 			lat = $("input:text[id=lat]").val();
 			lng= $("input:text[id=lng]").val();
-				alert(lat+" "+lng);
 			var damageid = "dmg_"+lat+lng;
 			var prov = $("#prov").find(":selected").text();
 			var muni = $("#muni").find(":selected").text();
@@ -268,12 +372,19 @@ function refreshform(){
 				alert("Please get Coordinates");	
 			}
 			
-			if(totally > farmarea){
-				alert("Totally damaged area must not be greater than Farm Area!");
+			if(totally > farmarea || partially > farmarea){
+				isSaveOK=false;
+				alert("Totally or Partially damaged area must not be greater than Farm Area!");
 			}
-			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
 			
-			if (prov=="Select Province Name"){
+			if(prov=="" || prov=="Select Province Name"){
+				isSaveOK=false;	
+				$("#req1").addClass("req");
+			}
+			
+			$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
+			
+			if (prov=="Select Province Name" || prov=="nul"){
 				prov="null"
 			}
 			if (muni=="Select Municipality"){
@@ -306,8 +417,6 @@ function refreshform(){
 			if (stage=="--Select Stage--" || stage == ""){
 				stage="null"
 			}
-		
-
 			
 			if(isSaveOK){
 		
@@ -316,8 +425,9 @@ function refreshform(){
 			if(savemode=="add"){
 				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,variety,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+variety+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
 				alert("Save Successfully");
-				alert(user);
-			}else if(savemode=="edit"){
+				alert(prov+" "+muni+" "+brgy);
+			}
+			else if(savemode=="edit"){
 				var pname1 = $("#t1").attr("data-filename");
 				var pname2 = $("#t2").attr("data-filename");
 				alert(pname1+"\n"+pname2);
@@ -329,7 +439,6 @@ function refreshform(){
 			}
 			savemode="add";
 			tx.executeSql(sql);
-			//refresh form
 			refreshform();
 			
 		}
@@ -377,11 +486,9 @@ function refreshform(){
 								},function(e){
 									alert("Cant open EDM File System")
 								});
+								
 							$("input:text[id=lat]").val(dmgitem.latitude);
 							$("input:text[id=lng]").val(dmgitem.longitude);
-							$('#prov').find(":selected").text(dmgitem.provname);
-							$('#muni').find(":selected").text(dmgitem.munname);
-							$('#brgy').find(":selected").text(dmgitem.bgyname);
 							$("input:text[id=farmloc]").val(dmgitem.farmloc);
 							$("input:text[id=owner]").val(dmgitem.ownername);
 							$("#farea").val(dmgitem.farmarea);
@@ -389,25 +496,133 @@ function refreshform(){
 							$("input:text[id=ffname]").val(dmgitem.firstname);
 							$("input:text[id=flname]").val(dmgitem.lastname);
 							$("input:text[id=faddress]").val(dmgitem.farmeraddress);
-							$('#level').find(":selected").text(dmgitem.flevel);
 							$("input:checkbox[id=flood]").val(dmgitem.flood);
-							$('#submergedays').find(":selected").text(dmgitem.submergeddays);
 							$("input:checkbox[id=wind]").val(dmgitem.wind);
-							$('#exposure').find(":selected").text(dmgitem.exposure);
-							$('#ctype').find(":selected").text(dmgitem.ctype);
-							$('#ecosystem').find(":selected").text(dmgitem.ecosystem);
-							$('#variety').find(":selected").text(dmgitem.variety);
-							$('#sclass').find(":selected").text(dmgitem.sclass);
-							$('#stage').find(":selected").text(dmgitem.stage);
 							$("#yieldbefore").val(dmgitem.yieldbefore);
 							$("#yieldafter").val(dmgitem.yieldafter);
 							$("#partially").val(dmgitem.partially);
 							$("#totally").val(dmgitem.totally);
 							$("input:text[id=remarks]").val(dmgitem.remarks);
 							
+							$('#prov').val(dmgitem.provname);
+							try{
+								$('#prov').selectmenu("refresh");
+								$("#prov").change();
+							}catch(e){
+								$('#prov').selectmenu();
+								$('#prov').selectmenu("refresh");
+								try{
+									$("#prov").change();
+								}catch(er){
+								}
+							}
+							
+							$("#muni").val(dmgitem.munname);
+							try{
+								$("#muni").selectmenu("refresh");
+								$("#muni").change();
+							}catch(e){
+								$("#muni").selectmenu();
+								$("#muni").selectmenu("refresh");
+								try{
+									$("#muni").change();
+								}catch(er){
+								}
+							}
+							
+							$("#brgy").val(dmgitem.bgyname);
+							try{
+								$("#brgy").selectmenu("refresh");
+							}catch(e){
+								$("#brgy").selectmenu();
+								$("#brgy").selectmenu("refresh");
+							}
+							
+							$("#level").val(dmgitem.flevel.trim());	
+							try{
+								$("#level").selectmenu("refresh");
+							}catch(e){
+								$("#level").selectmenu();
+								$("#level").selectmenu("refresh");
+							}
+							
+							$("#level").val(dmgitem.flevel.trim());	
+							try{
+								$("#level").selectmenu("refresh");
+							}catch(e){
+								$("#level").selectmenu();
+								$("#level").selectmenu("refresh");
+							}
+							
+							$("#submergedays").val(dmgitem.submergeddays.trim());	
+							try{
+								$("#submergedays").selectmenu("refresh");
+							}catch(e){
+								$("#submergedays").selectmenu();
+								$("#submergedays").selectmenu("refresh");
+							}
+							
+							$("#exposure").val(dmgitem.exposure.trim());	
+							try{
+								$("#exposure").selectmenu("refresh");
+							}catch(e){
+								$("#exposure").selectmenu();
+								$("#exposure").selectmenu("refresh");
+							}
+							
+							$("#ctype").val(dmgitem.ctype.trim());	
+							try{
+								$("#ctype").selectmenu("refresh");
+								$("#ctype").change();
+							}catch(e){
+								$("#ctype").selectmenu();
+								$("#ctype").selectmenu("refresh");
+								try{
+									$("#ctype").change();
+								}catch(er){
+								}
+							}
+							
+							var eco=$("#ecosystem").val(dmgitem.ecosystem);
+								try{
+								$("#ecosystem").selectmenu("refresh");
+								$("#ecosystem").change();
+							}catch(e){
+								$("#ecosystem").selectmenu();
+								$("#ecosystem").selectmenu("refresh");
+								try{
+									$("#ecosystem").change();
+								}catch(er){
+								}
+							}
+							$("#variety").val(dmgitem.variety.trim());	
+							try{
+								$("#variety").selectmenu("refresh");
+							}catch(e){
+								$("#variety").selectmenu();
+								$("#variety").selectmenu("refresh");
+							}
+				
+							$("#sclass").val(dmgitem.sclass.trim());	
+							try{
+								$("#sclass").selectmenu("refresh");
+							}catch(e){
+								$("#sclass").selectmenu();
+								$("#sclass").selectmenu("refresh");
+							}
+							
+							$("#stage").val(dmgitem.stage.trim());	
+							try{
+								$("#stage").selectmenu("refresh");
+							}catch(e){
+								$("#stage").selectmenu();
+								$("#stage").selectmenu("refresh");
+							}
+							
 						savemode="edit";
 						$.mobile.navigate("#add");
-						
+						$("#myheader a").addClass("ui-disabled");
+									
 						}
 					});
 				});
@@ -695,100 +910,4 @@ function onError(error){
 	alert('code' +error.code +'\n'+ 'message:' +error.message);
 }
 
-
-$(document).ready(function () {
-	$("#coordsave").click(function(){
-		var lat = $('input:text[id=clat]').val();
-		var lng = $('input:text[id=clng]').val();
-		$("#lat").val(lat);
-		$("#lng").val(lng);
-		$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
-		});
-		//if partially has value, disabled totally.
-		$("#partially").change(function(){
-			if($(this).val() !="" || $(this).val().length > 0){
-				$("#totally").attr("disabled","disabled");
-			}
-			else{
-				$("#totally").removeAttr("disabled");
-			}
-		});
-		//if totally has value, disabled partially
-		$("#totally").change(function(){
-			if($(this).val() !="" || $(this).val().length > 0){
-				$("#partially").attr("disabled","disabled");
-			}
-			else{
-				$("#partially").removeAttr("disabled");
-			}
-		});
-		$("#faddr").click(function(){
-			if($(this).prop('checked')){
-				$("#faddress").val($("#farmloc").val());
-			}
-			else{
-				$("#faddress").val("null");
-			}
-		});
-		
-		$("#lowner").click(function(){
-			if($(this).prop('checked')){
-				$("#owner").val($("#ffname").val()+" "+$("#flname").val());
-			}
-			else{
-				$("#owner").val("null");
-			}
-		});
-			
-			
-	
-		$("#ctype").change(function(){
-			var ctype=$("#ctype").val();
-			var ecosystem = $("#ecosystem");
-			var stage = $("#stage");
-			if(ctype=="rice"){
-			document.getElementById('variety').setAttribute('disabled', true);
-				$("#ecotext").text("Ecosystem");
-				$(ecosystem).html("<option value='default'>--Select Ecosystem--</option><option value='inbred'>Irrigated - Inbred</option><option value='hybrid'>Irrigated - Hybrid</option><option value='rainfed'>Rainfed</option><option value='upland'>Upland</option>");
-				
-				//to load stages of rice
-				$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value = 'seedling'>Seedling</option><option value = 'tillering'>Tillering</option><option value = 'stem'>Stem Elongation</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value = 'booting'>Booting</option><option value = 'heading'>Heading</option><option value = 'flowering'>Flowering</option></optgroup><optgroup label='MATURITY'><option value = 'milking'>Milking</option><option value = 'dough'>Dough</option><option value = 'ripening'>Ripening</option></optgroup>");
-			}
-			else{
-				  document.getElementById('variety').removeAttribute('disabled');
-				$("#ecotext").text("Topography");
-				$(ecosystem).html("<option value='default'>--Select Topography--</option><option value='upland'>Upland</option><option value='lowland'>Lowland</option>");
-				$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option><option value='registered'>Registered Seed</option>");
-				
-				$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value='emergence'>Emergence</option><option value='first'>First Leaf Collar</option><option value='second'>Second Leaf Collar</option><option value='third'>Third Leaf Collar</option><option value='nth'>Nth Leaf Collar</option><option value='tassel'>Tasseling</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value='silking'>Silking</option><option value='blister'>Blister</option><option value='milking'>Milking</option><option value='dough'>Dough</option><option value='dent'>Dent</option><option value='maturity'>Maturity</option></optgroup>");
-				
-			}
-			
-			$("#ecosystem option").removeAttr("selected");
-			$("#stage").selectmenu("refresh",true);
-			$("#stage option").removeAttr("selected");
-			$("#ecosystem").selectmenu("refresh",true);
-			$("#variety option").removeAttr("selected");
-			$("#variety").selectmenu("refresh",true);
-			$("#sclass option").removeAttr("selected");
-			$("#sclass").selectmenu("refresh",true);
-		});
-	
-		$("#ecosystem").change(function(){
-		 var ecosystem = $("#ecosystem").val();
-		 var sclass=$("#sclass");
-			if(ecosystem == "inbred" || ecosystem=="lowland" || ecosystem=="upland"){
-				$(sclass).val("");
-				$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='registered'>Registered Seed</option><option value='certified'>Certified Seed</option><option value='good'>Good Seed</option>");
-			}
-			else{
-				$(sclass).html("<option value='default'>--Select Seed Class--</option>");
-			}
-			$("#sclass option").removeAttr("selected");
-			$("#sclass").selectmenu("refresh",true);
-		});
-		
-		
-				
-	});//end of document ready
 	
