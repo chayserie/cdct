@@ -365,6 +365,7 @@ $("#btnsave").click(function(){
 			var remarks = $('#remarks').val().toString().replace(/,/g, "");
 			var pname1 = $("#t1").attr("data-filename");
 			var pname2 = $("#t2").attr("data-filename");
+			
 			var isSaveOK = true;
 			
 			if(lng=="" && lat == ""){
@@ -374,48 +375,43 @@ $("#btnsave").click(function(){
 			
 			if(totally > farmarea || partially > farmarea){
 				isSaveOK=false;
-				alert("Totally or Partially damaged area must not be greater than Farm Area!");
+				alert("Totally or Partially damaged area must not be greater than the Farm Area!");
 			}
 			
-			if(prov=="" || prov=="Select Province Name"){
-				isSaveOK=false;	
-				$("#req1").addClass("req");
-			}
 			
-			$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
-			
-			if (prov=="Select Province Name" || prov=="nul"){
-				prov="null"
+			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
+			if (prov=="Select Province Name"){
+				prov=""
 			}
 			if (muni=="Select Municipality"){
-				muni="null"
+				muni=""
 			}
 			if (brgy=="Select Barangay"){
-				brgy="null"
+				brgy=""
 			}
 			if (level=="--Select Water Level--"){
-				level="null"
+				level=""
 			}
 			if (submergedays=="--Select Days of Submergence--"){
-				submergedays="null"
+				submergedays=""
 			}
 			if (exposure=="--Select Period of Exposure--"){
-				exposure="null"
+				exposure=""
 			}
 			if (ctype=="--Select Crop Type--"){
-				ctype="null"
+				ctype=""
 			}
 			if (ecosystem=="--Select Ecosystem--" || ecosystem == ""){
-				ecosystem="null"
+				ecosystem=""
 			}
 			if (variety=="--Select Variety--" || variety == ""){
-				variety="null"
+				variety=""
 			}
 			if (sclass=="--Select Seed Class--" || sclass == ""){
-				sclass="null"
+				sclass=""
 			}
 			if (stage=="--Select Stage--" || stage == ""){
-				stage="null"
+				stage=""
 			}
 			
 			if(isSaveOK){
@@ -425,17 +421,18 @@ $("#btnsave").click(function(){
 			if(savemode=="add"){
 				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flevel,flood,submergeddays,wind,exposure,ctype,ecosystem,variety,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+variety+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
 				alert("Save Successfully");
-				alert(prov+" "+muni+" "+brgy);
 			}
 			else if(savemode=="edit"){
-				var pname1 = $("#t1").attr("data-filename");
-				var pname2 = $("#t2").attr("data-filename");
-				alert(pname1+"\n"+pname2);
+			
 				sql = "update CropDamage set latitude='"+lat+"',longitude='"+lng+"',provname='"+prov+"', munname='"+muni+"',bgyname='"+brgy+"',farmloc='"+farmloc+"',ownername='"+owner+"',farmarea='"+farmarea+"',farmname='"+frname+"', firstname='"+ffname+"',lastname='"+flastname+"', farmeraddress='"+faddress+"', flevel='"+level+"', flood='"+flood+"',submergeddays='"+submergedays+"', wind='"+wind+"', exposure='"+exposure+"', ctype='"+ctype+"', ecosystem='"+ecosystem+"', variety='"+variety+"', sclass='"+sclass+"', stage='"+stage+"', yieldbefore='"+yieldbefore+"', yieldafter='"+yieldafter+"', partially='"+partially+"', totally='"+totally+"',photo1='"+pname1+"',photo2='"+pname2+"', remarks='"+remarks+"' where CropdamageID='"+id+"'";
-				$("#croplist").listview("refresh");
 				$(":mobile-pagecontainer").pagecontainer("change", "#display", {reloadPage:false});
+				//
+				
+				var s=$("#croplist li").find("h2").text();
+				alert(s);
 				alert(pname1+pname2);
 				alert("update successfully");
+				$("#croplist").listview("refresh");
 			}
 			savemode="add";
 			tx.executeSql(sql);
@@ -455,7 +452,7 @@ $("#btnsave").click(function(){
 			$("#croplist").html("");
 			for(var x=0;x<res.rows.length;x++){
 				 id = res.rows.item(x).CropdamageID;
-				$("#croplist").append("<li data-id='"+id+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='#' class='editbutton'></a></li>");	
+				$("#croplist").append("<li data-id='"+id+"' data-img1='"+res.rows.item(x).photo1+"' data-img2='"+res.rows.item(x).photo2+"'><a href='#' class='cropdetails'><h2>"+res.rows.item(x).lastname+" "+res.rows.item(x).firstname+"</h2>"+"<h3>"+res.rows.item(x).farmloc+"</h3><h3>"+res.rows.item(x).bgyname+"</h3></a><a href='#' class='editbutton'></a></li>");	
 			}
 			$("#croplist").listview("refresh");
 			
@@ -473,6 +470,8 @@ $("#btnsave").click(function(){
 							window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 									fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
 										CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+											$("#t1").attr("data-filename",p1);
+											$("#t2").attr("data-filename",p2);
 											p1 = imgDir.toURL() + p1;
 											p2 = imgDir.toURL() + p2;
 											$("#t1").attr("src",p1);
@@ -486,7 +485,6 @@ $("#btnsave").click(function(){
 								},function(e){
 									alert("Cant open EDM File System")
 								});
-								
 							$("input:text[id=lat]").val(dmgitem.latitude);
 							$("input:text[id=lng]").val(dmgitem.longitude);
 							$("input:text[id=farmloc]").val(dmgitem.farmloc);

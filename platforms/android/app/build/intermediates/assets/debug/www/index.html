@@ -87,17 +87,20 @@
 					Latitude:
 					<input disabled type="text" id="lat" style="color:red";>
 					Longitude:
-					<input disabled type="text" class="req" id="lng" style="color:red";>
+					<input disabled type="text" id="lng" style="color:red";>
 					Province Name:
-					<select id="prov"><span class="req1">aeffw</span>
+					<span class="req">*</span>
+					<select id="prov" required>
 						<option value="default">Select Province Name</option>
 					</select>
 					Municipality Name:
-					<select id="muni">
+					<span class="req">*</span>
+					<select id="muni" required>
 						<option value="default">Select Municipality</option>
 					</select>
 					Barangay Name:
-					<select id="brgy">
+					<span class="req">*</span>
+					<select id="brgy" required>
 						<option value="default">Select Barangay</option>
 					</select>
 					Farm Location(Sitio/Purok):
@@ -105,9 +108,11 @@
 					<hr>
 					<h4>Farmer Data</h4>
 					Farmer Last Name:
-					<input type="text" id="flname">
+					<span class="req">*</span>
+					<input required type="text" id="flname">
 					Farmer First Name:
-					<input type="text" id="ffname">
+					<span class="req">*</span>
+					<input required type="text" id="ffname">
 					Farmer Address (Sitio/Purok)<br>
 					<input type="checkbox" name="faddr" id="faddr" checked="">
 					<label for="faddr">Same as Farm Location?</label>
@@ -119,7 +124,8 @@
 					<label for="lowner">Same as Farmer Name?</label>
 					<input type="text" id="owner" placeholder="LastName FirstName">
 					Farm Area (Hectare)
-					<input type="number" id="farea">
+					<span class="req">*</span>
+					<input required type="number" id="farea">
 					Farm Name
 					<input type="text" id="frname" placeholder="ex. Owner Farm1">
 					<hr>
@@ -155,16 +161,17 @@
 					<form id="cropform">
 							<h4>Crop Data</h4>
 					Crop Type
-					<select id="ctype">
+					<span class="req">*</span>
+					<select required id="ctype">
 						<option value="default">--Select Crop Type--</option>
 						<option value="Rice">Rice</option>
 						<option value="Corn">Corn</option>
 					</select>
-					<label id = "ecotext">Ecosystem</label>
-					<select id="ecosystem">
+					<label id = "ecotext">Ecosystem *</label>
+					<select required id="ecosystem">
 						<option value="default">--Select Ecosystem--</option>
 					</select>
-					<label id="classtext">Corn Variety</label>
+					<label id="classtext">Corn Variety *</label>
 					<select id="variety">
 					<option value="default">--Select Variety--</option>
 						<optgroup label="TRANSGENIC CORN">
@@ -176,15 +183,14 @@
 						<option value="Flint">Flint</option>
 						<option value="Glutinous">Glutinous</option>
 						<option value="Sweet-Corn">Sweet-Corn</option>
-						</optgroup>
-						
+						</optgroup>				
 					</select>
-					<label id="classtext">Seed Class:</label>
+					<label id="classtext">Seed Class: *</label>
 					<select id="sclass">
 						<option value="default">--Select Seed Class--</option>
 					</select>
-					<label id="stagetext">Stage</label>
-					<select id="stage">
+					<label id="stagetext">Stage *</label>
+					<select required id="stage">
 						
 					</select>
 					</form>
@@ -197,12 +203,12 @@
 					<div data-role="popup" id="ybinfo" class="ui-content" data-theme="a" style="max-width:350px;">
 					<p>refers to the average yield per hectare <strong>before</strong> the occurrence of the calamity</p>
 					</div>
-					<input type="number" id="yieldbefore">
+					<input required type="number" id="yieldbefore">
 					Yield After Calamity<a href="#yafter" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="yafter" class="ui-content" data-theme="a" style="max-width:350px;">
 					<p>refers to the actual average yield per hectare <strong>after</strong> the occurrence of the calamity</p>
 					</div>
-					<input type="number" id="yieldafter">
+					<input required type="number" id="yieldafter">
 					<h4>Area Affected (ha)</h4>
 					Partially Damaged<a href="#partiallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="partiallyinfo" class="ui-content" data-theme="a" style="max-width:350px;">
