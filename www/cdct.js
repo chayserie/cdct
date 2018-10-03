@@ -76,6 +76,7 @@ $(document).ready(function(){
 		muni.sort();
 		//clear muni
 		$("#muni").html("");
+		$("#brgy").html("");
 		$("#muni").append("<option value = 'default'>Select Municipality</option>")
 		for(i=0; i< muni.length; i++){
 			$("#muni").append("<option>" + muni[i] + "</option>");
@@ -125,18 +126,22 @@ $(document).ready(function(){
 	$("#partially").change(function(){
 		if($(this).val() !="" || $(this).val().length > 0){
 			$("#totally").attr("disabled","disabled");
+			$("#totally").css("background-color", "red");
 		}
 		else{
 			$("#totally").removeAttr("disabled");
+			$("#totally").css("background-color", "");
 		}
 	});
 	//if totally has value, disabled partially
 	$("#totally").change(function(){
 		if($(this).val() !="" || $(this).val().length > 0){
 			$("#partially").attr("disabled","disabled");
+			$("#partially").css("background-color", "red");
 		}
 		else{
 			$("#partially").removeAttr("disabled");
+			$("#partially").css("background-color", "");
 		}
 	});
 	//check if the value of farm address same as the farmer address //
@@ -306,7 +311,7 @@ function refreshform(){
 	$("#add input[type=text]").val("");
 	$("#add input[type=number]").val("");
 	$("#remarks").val("");
-    $('input[type=checkbox]').prop('checked', false).checkboxradio('refresh');
+	$("input[type='checkbox']").attr("checked",false).checkboxradio("refresh");
 	$("select option").removeAttr("selected");
 	$("select").selectmenu("refresh",true);
 	$("#myheader a").removeClass("ui-disabled");
@@ -319,13 +324,14 @@ function refreshform(){
 	$("#btnsave").text("Save Data");
   refreshform();
   
+  
 });
 
 $("#btnsave").click(function(){
 		datesurvey();
 		db.transaction(function(tx){
 			
-			if($("#wind").prop('checked')){ 
+			if($("#wind").prop('checked')){
 			value="true"; 
 			}else{
 				value="false"; 
@@ -378,8 +384,6 @@ $("#btnsave").click(function(){
 				isSaveOK=false;
 				alert("Totally or Partially damaged area must not be greater than the Farm Area!");
 			}
-			
-			
 			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
 			if (prov=="Select Province Name"){
 				prov=""
@@ -495,18 +499,21 @@ $("#btnsave").click(function(){
 							$("input:text[id=ffname]").val(dmgitem.firstname);
 							$("input:text[id=flname]").val(dmgitem.lastname);
 							$("input:text[id=faddress]").val(dmgitem.farmeraddress);
-							$("input:checkbox[id=flood]").val(dmgitem.flood);
-							$("input:checkbox[id=wind]").val(dmgitem.wind);
 							$("#yieldbefore").val(dmgitem.yieldbefore);
 							$("#yieldafter").val(dmgitem.yieldafter);
 							$("#partially").val(dmgitem.partially);
 							$("#totally").val(dmgitem.totally);
 							$("input:text[id=remarks]").val(dmgitem.remarks);
+							$("#flood").val(dmgitem.flood);
+							$("#wind").val(dmgitem.wind);
+							
+							
 							
 							$('#prov').val(dmgitem.provname);
 							try{
 								$('#prov').selectmenu("refresh");
 								$("#prov").change();
+								$("#muni").change();
 							}catch(e){
 								$('#prov').selectmenu();
 								$('#prov').selectmenu("refresh");
@@ -535,6 +542,10 @@ $("#btnsave").click(function(){
 							}catch(e){
 								$("#brgy").selectmenu();
 								$("#brgy").selectmenu("refresh");
+								try{
+									$("#brgy").change();
+								}catch(er){
+								}
 							}
 							
 							$("#level").val(dmgitem.flevel.trim());	
@@ -616,6 +627,24 @@ $("#btnsave").click(function(){
 							}catch(e){
 								$("#stage").selectmenu();
 								$("#stage").selectmenu("refresh");
+							}
+						
+							if(dmgitem.flood=="true"){
+								$("#flood").prop("checked", true).checkboxradio("refresh");
+								alert(dmgitem.flood);
+							}
+							else{
+								$("#flood").prop("checked",false).checkboxradio("refresh");
+								alert(dmgitem.flood);					
+							}
+							
+							if(dmgitem.wind=="true"){
+								$("#wind").prop("checked", true).checkboxradio("refresh");
+								alert(dmgitem.wind);
+							}
+							else{
+								$("#wind").prop("checked",false).checkboxradio("refresh");
+								alert(dmgitem.wind);					
 							}
 							
 						savemode="edit";
