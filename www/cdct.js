@@ -76,7 +76,6 @@ $(document).ready(function(){
 		muni.sort();
 		//clear muni
 		$("#muni").html("");
-		$("#brgy").html("");
 		$("#muni").append("<option value = 'default'>Select Municipality</option>")
 		for(i=0; i< muni.length; i++){
 			$("#muni").append("<option>" + muni[i] + "</option>");
@@ -126,22 +125,22 @@ $(document).ready(function(){
 	$("#partially").change(function(){
 		if($(this).val() !="" || $(this).val().length > 0){
 			$("#totally").attr("disabled","disabled");
-			$("#totally").css("background-color", "red");
+			//$("#totally").css("background-color", "red");
 		}
 		else{
 			$("#totally").removeAttr("disabled");
-			$("#totally").css("background-color", "");
+			//$("#totally").css("background-color", "");
 		}
 	});
 	//if totally has value, disabled partially
 	$("#totally").change(function(){
 		if($(this).val() !="" || $(this).val().length > 0){
 			$("#partially").attr("disabled","disabled");
-			$("#partially").css("background-color", "red");
+			//$("#partially").css("background-color", "red");
 		}
 		else{
 			$("#partially").removeAttr("disabled");
-			$("#partially").css("background-color", "");
+			//$("#partially").css("background-color", "");
 		}
 	});
 	//check if the value of farm address same as the farmer address //
@@ -183,7 +182,7 @@ $(document).ready(function(){
 			document.getElementById('variety').removeAttribute('disabled');
 			$("#ecotext").text("Topography");
 			$(ecosystem).html("<option value='default'>--Select Topography--</option><option value='Upland'>Upland</option><option value='Lowland'>Lowland</option>");
-			$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='Certified-Seed'>Certified-Seed</option><option value='Good-Seed'>Good-Seed</option><option value='Registered-Seed'>Registered-Seed</option>");
+			$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='Certified-Seed'>Certified-Seed</option><option value='Registered-Seed'>Registered-Seed</option><option value='Good-Seed'>Good-Seed</option>");
 			
 			$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value='Emergence'>Emergence</option><option value='First-Leaf-Collar'>First-Leaf-Collar</option><option value='Second-Leaf-Collar'>Second-Leaf-Collar</option><option value='Third-Leaf-Collar'>Third-Leaf-Collar</option><option value='Nth-Leaf-Collar'>Nth-Leaf-Collar</option><option value='Tasseling'>Tasseling</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value='Silking'>Silking</option><option value='Blister'>Blister</option><option value='Milking'>Milking</option><option value='Dough'>Dough</option><option value='Dent'>Dent</option><option value='Maturity'>Maturity</option></optgroup>");
 			
@@ -311,7 +310,12 @@ function refreshform(){
 	$("#add input[type=text]").val("");
 	$("#add input[type=number]").val("");
 	$("#remarks").val("");
-	$("input[type='checkbox']").attr("checked",false).checkboxradio("refresh");
+	try {
+		$("input[type='checkbox']").attr("checked",false).checkboxradio("refresh");
+	}catch(e) {
+		$("input[type='checkbox']").attr("checked",false).checkboxradio();
+		$("input[type='checkbox']").attr("checked",false).checkboxradio("refresh");
+	}
 	$("select option").removeAttr("selected");
 	$("select").selectmenu("refresh",true);
 	$("#myheader a").removeClass("ui-disabled");
@@ -382,7 +386,7 @@ $("#btnsave").click(function(){
 			
 			if(totally > farmarea || partially > farmarea){
 				isSaveOK=false;
-				alert("Totally or Partially damaged area must not be greater than the Farm Area!");
+				alert("Totally or Partially damaged area should not be greater than the Farm Area!");
 			}
 			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
 			if (prov=="Select Province Name"){
@@ -464,7 +468,7 @@ $("#btnsave").click(function(){
 			$(".editbutton").click(function(e){
 				 id = $(this).parent().attr("data-id");
 				var name = $(this).find("h2");
-				alert("Updating data: " +id);
+				console.log("Updating data: " +id);
 				//Create db transaction searching for the dmg id
 				db.transaction(function(tx){
 					tx.executeSql("select * from CropDamage where CropdamageID='"+id+"'",[],function(tx,res){
@@ -506,10 +510,8 @@ $("#btnsave").click(function(){
 							$("input:text[id=remarks]").val(dmgitem.remarks);
 							$("#flood").val(dmgitem.flood);
 							$("#wind").val(dmgitem.wind);
-							
-							
-							
 							$('#prov').val(dmgitem.provname);
+							console.log("Province:");
 							try{
 								$('#prov').selectmenu("refresh");
 								$("#prov").change();
@@ -522,7 +524,7 @@ $("#btnsave").click(function(){
 								}catch(er){
 								}
 							}
-							
+							console.log("Muni:");
 							$("#muni").val(dmgitem.munname);
 							try{
 								$("#muni").selectmenu("refresh");
@@ -535,7 +537,7 @@ $("#btnsave").click(function(){
 								}catch(er){
 								}
 							}
-							
+							console.log("Bgy:");
 							$("#brgy").val(dmgitem.bgyname);
 							try{
 								$("#brgy").selectmenu("refresh");
@@ -547,7 +549,7 @@ $("#btnsave").click(function(){
 								}catch(er){
 								}
 							}
-							
+							console.log("Level:");
 							$("#level").val(dmgitem.flevel.trim());	
 							try{
 								$("#level").selectmenu("refresh");
@@ -556,14 +558,7 @@ $("#btnsave").click(function(){
 								$("#level").selectmenu("refresh");
 							}
 							
-							$("#level").val(dmgitem.flevel.trim());	
-							try{
-								$("#level").selectmenu("refresh");
-							}catch(e){
-								$("#level").selectmenu();
-								$("#level").selectmenu("refresh");
-							}
-							
+							console.log("Submerge:");
 							$("#submergedays").val(dmgitem.submergeddays.trim());	
 							try{
 								$("#submergedays").selectmenu("refresh");
@@ -572,6 +567,7 @@ $("#btnsave").click(function(){
 								$("#submergedays").selectmenu("refresh");
 							}
 							
+							console.log("Exposure:");
 							$("#exposure").val(dmgitem.exposure.trim());	
 							try{
 								$("#exposure").selectmenu("refresh");
@@ -580,6 +576,7 @@ $("#btnsave").click(function(){
 								$("#exposure").selectmenu("refresh");
 							}
 							
+							console.log("Ctype:");
 							$("#ctype").val(dmgitem.ctype.trim());	
 							try{
 								$("#ctype").selectmenu("refresh");
@@ -593,6 +590,7 @@ $("#btnsave").click(function(){
 								}
 							}
 							
+							console.log("Eco:");
 							var eco=$("#ecosystem").val(dmgitem.ecosystem);
 								try{
 								$("#ecosystem").selectmenu("refresh");
@@ -605,6 +603,7 @@ $("#btnsave").click(function(){
 								}catch(er){
 								}
 							}
+							console.log("Variety:");
 							$("#variety").val(dmgitem.variety.trim());	
 							try{
 								$("#variety").selectmenu("refresh");
@@ -613,6 +612,7 @@ $("#btnsave").click(function(){
 								$("#variety").selectmenu("refresh");
 							}
 				
+							console.log("Sclass:");
 							$("#sclass").val(dmgitem.sclass.trim());	
 							try{
 								$("#sclass").selectmenu("refresh");
@@ -621,6 +621,7 @@ $("#btnsave").click(function(){
 								$("#sclass").selectmenu("refresh");
 							}
 							
+							console.log("Submerge:");
 							$("#stage").val(dmgitem.stage.trim());	
 							try{
 								$("#stage").selectmenu("refresh");
@@ -628,17 +629,40 @@ $("#btnsave").click(function(){
 								$("#stage").selectmenu();
 								$("#stage").selectmenu("refresh");
 							}
-						
+							
+							console.log("flood:");
 							if(dmgitem.flood=="true"){
-								$("#flood").prop("checked", true).checkboxradio("refresh");
-								alert(dmgitem.flood);
+								$("#flood").prop("checked", true);
 							}
 							else{
-								$("#flood").prop("checked",false).checkboxradio("refresh");
-								alert(dmgitem.flood);					
+								$("#flood").prop("checked",false);
 							}
 							
+							console.log("flood check:");
+							try {
+								$("#flood").checkboxradio("refresh");
+							}catch(e) {
+								$("#flood").checkboxradio();
+								$("#flood").checkboxradio("refresh");
+							}
+							
+							console.log("windcheck:");
 							if(dmgitem.wind=="true"){
+								$("#wind").prop("checked", true);
+							}
+							else{
+								$("#wind").prop("checked",false);		
+							}
+							try{
+								$("#wind").checkboxradio("refresh")
+							}
+							catch(e){
+								$("#wind").checkboxradio();
+								$("#wind").checkboxradio("refresh");
+							}
+							
+							
+					/*		if(dmgitem.wind=="true"){
 								$("#wind").prop("checked", true).checkboxradio("refresh");
 								alert(dmgitem.wind);
 							}
@@ -646,8 +670,10 @@ $("#btnsave").click(function(){
 								$("#wind").prop("checked",false).checkboxradio("refresh");
 								alert(dmgitem.wind);					
 							}
+							*/
 							
 						savemode="edit";
+						console.log("Navigate:");
 						$.mobile.navigate("#add");
 						$("#myheader a").addClass("ui-disabled");
 									
@@ -817,7 +843,7 @@ function initDatabase() {
 							xdata.datesurvey+","+
 							xdata.timesurvey+", \n";
 				}
-				alert(expo);
+				//alert(expo);
 				exportdb(expo);
 			},function(error){
 				alert("ExecuteSql Error: " + error);

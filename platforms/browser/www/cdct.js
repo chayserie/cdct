@@ -76,7 +76,6 @@ $(document).ready(function(){
 		muni.sort();
 		//clear muni
 		$("#muni").html("");
-		$("#brgy").html("");
 		$("#muni").append("<option value = 'default'>Select Municipality</option>")
 		for(i=0; i< muni.length; i++){
 			$("#muni").append("<option>" + muni[i] + "</option>");
@@ -183,7 +182,7 @@ $(document).ready(function(){
 			document.getElementById('variety').removeAttribute('disabled');
 			$("#ecotext").text("Topography");
 			$(ecosystem).html("<option value='default'>--Select Topography--</option><option value='Upland'>Upland</option><option value='Lowland'>Lowland</option>");
-			$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='Certified-Seed'>Certified-Seed</option><option value='Good-Seed'>Good-Seed</option><option value='Registered-Seed'>Registered-Seed</option>");
+			$(sclass).html("<option value='default'>--Select Seed Class--</option><option value='Certified-Seed'>Certified-Seed</option><option value='Registered-Seed'>Registered-Seed</option><option value='Good-Seed'>Good-Seed</option>");
 			
 			$(stage).html("<option value='default'>--Select Stage--</option><optgroup label='VEGETATIVE PHASE'><option value='Emergence'>Emergence</option><option value='First-Leaf-Collar'>First-Leaf-Collar</option><option value='Second-Leaf-Collar'>Second-Leaf-Collar</option><option value='Third-Leaf-Collar'>Third-Leaf-Collar</option><option value='Nth-Leaf-Collar'>Nth-Leaf-Collar</option><option value='Tasseling'>Tasseling</option></optgroup><optgroup label='REPRODUCTIVE PHASE'><option value='Silking'>Silking</option><option value='Blister'>Blister</option><option value='Milking'>Milking</option><option value='Dough'>Dough</option><option value='Dent'>Dent</option><option value='Maturity'>Maturity</option></optgroup>");
 			
@@ -382,7 +381,7 @@ $("#btnsave").click(function(){
 			
 			if(totally > farmarea || partially > farmarea){
 				isSaveOK=false;
-				alert("Totally or Partially damaged area must not be greater than the Farm Area!");
+				alert("Totally or Partially damaged area should not be greater than the Farm Area!");
 			}
 			//$(".req").append("<span style='color:red; font-weight:bold;'> \n Required Field </span>");
 			if (prov=="Select Province Name"){
@@ -506,9 +505,6 @@ $("#btnsave").click(function(){
 							$("input:text[id=remarks]").val(dmgitem.remarks);
 							$("#flood").val(dmgitem.flood);
 							$("#wind").val(dmgitem.wind);
-							
-							
-							
 							$('#prov').val(dmgitem.provname);
 							try{
 								$('#prov').selectmenu("refresh");
@@ -628,8 +624,8 @@ $("#btnsave").click(function(){
 								$("#stage").selectmenu();
 								$("#stage").selectmenu("refresh");
 							}
-						
-							if(dmgitem.flood=="true"){
+							try{
+								if(dmgitem.flood=="true"){
 								$("#flood").prop("checked", true).checkboxradio("refresh");
 								alert(dmgitem.flood);
 							}
@@ -637,8 +633,13 @@ $("#btnsave").click(function(){
 								$("#flood").prop("checked",false).checkboxradio("refresh");
 								alert(dmgitem.flood);					
 							}
+							}
+							catch(e){
+								$("#flood").checkboxradio("refresh");
+							}
 							
-							if(dmgitem.wind=="true"){
+							
+					/*		if(dmgitem.wind=="true"){
 								$("#wind").prop("checked", true).checkboxradio("refresh");
 								alert(dmgitem.wind);
 							}
@@ -646,6 +647,7 @@ $("#btnsave").click(function(){
 								$("#wind").prop("checked",false).checkboxradio("refresh");
 								alert(dmgitem.wind);					
 							}
+							*/
 							
 						savemode="edit";
 						$.mobile.navigate("#add");
