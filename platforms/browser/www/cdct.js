@@ -121,29 +121,25 @@ $(document).ready(function(){
 		$("#lng").val(lng);
 		$(":mobile-pagecontainer").pagecontainer("change", "#add", {reloadPage:false});
 	});
-	//if partially has value, disabled totally.
+	//if totally has value, disabled partially
 	$("#partially").change(function(){
 		if($(this).val() !="" || $(this).val().length > 0){
 			$("#totally").attr("disabled","disabled");
-			//$("#totally").css("background-color", "red");
 		}
 		else{
 			$("#totally").removeAttr("disabled");
-			//$("#totally").css("background-color", "");
 		}
 	});
-	//if totally has value, disabled partially
+		//if totally has value, disabled partially
 	$("#totally").change(function(){
 		if($(this).val() !="" || $(this).val().length > 0){
 			$("#partially").attr("disabled","disabled");
-			//$("#partially").css("background-color", "red");
 		}
 		else{
 			$("#partially").removeAttr("disabled");
-			//$("#partially").css("background-color", "");
 		}
 	});
-	//check if the value of farm address same as the farmer address //
+	//check if the value of farm address is same as the farmer address //
 	$("#faddr").click(function(){
 		if($(this).prop('checked')){
 			$("#faddress").val($("#farmloc").val());
@@ -352,13 +348,13 @@ $("#btnsave").click(function(){
 			var prov = $("#prov").find(":selected").text();
 			var muni = $("#muni").find(":selected").text();
 			var brgy = $("#brgy").find(":selected").text();
-			var farmloc = $('input:text[id=farmloc]').val().toString().replace(/,/g, "");
-			var owner = $('input:text[id=owner]').val().toString().replace(/,/g, "");
+			var farmloc = $('input:text[id=farmloc]').val().toString().replace(/["',]/g, "");
+			var owner = $('input:text[id=owner]').val().toString().replace(/["',]/g, "");
 			var farmarea = $("#farea").val();
-			var frname = $('input:text[id=frname]').val().toString().replace(/,/g, "");
-			var flastname = $('input:text[id=flname]').val().toString().replace(/,/g, "");
-			var ffname = $('input:text[id=ffname]').val().toString().replace(/,/g, "");
-			var faddress = $('input:text[id=faddress]').val().toString().replace(/,/g, "");
+			var frname = $('input:text[id=frname]').val().toString().replace(/["',]/g, "");
+			var flastname = $('input:text[id=flname]').val().toString().replace(/["',]/g, "");
+			var ffname = $('input:text[id=ffname]').val().toString().replace(/["',]/g, "");
+			var faddress = $('input:text[id=faddress]').val().toString().replace(/["',]/g, "");
 			var flood = $('#flood').prop("checked");
 			var submergedays = $("#submergedays").find(":selected").text();
 			var wind = $('#wind').prop("checked");
@@ -368,11 +364,11 @@ $("#btnsave").click(function(){
 			var variety = $("#variety").find(":selected").text();
 			var sclass = $("#sclass").find(":selected").text();
 			var stage = $("#stage").find(":selected").text();
-			var yieldbefore = $('#yieldbefore').val().toString().replace(/,/g, "");
-			var yieldafter = $('#yieldafter').val().toString().replace(/,/g, "");
-			var partially = $('#partially').val().toString().replace(/,/g, "");
-			var totally = $('#totally').val().toString().replace(/,/g, "");
-			var remarks = $('#remarks').val().toString().replace(/,/g, "");
+			var yieldbefore = $('#yieldbefore').val().toString().replace(/["',]/g, "");
+			var yieldafter = $('#yieldafter').val().toString().replace(/["',]/g, "");
+			var partially = $('#partially').val().toString().replace(/["',]/g, "");
+			var totally = $('#totally').val().toString().replace(/["',]/g, "");
+			var remarks = $('#remarks').val().toString().replace(/["',]/g, "");
 			var pname1 = $("#t1").attr("data-filename");
 			var pname2 = $("#t2").attr("data-filename");
 			
@@ -424,7 +420,7 @@ $("#btnsave").click(function(){
 			var sql="";
 
 			if(savemode=="add"){
-				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flood,submergeddays,wind,exposure,ctype,ecosystem,variety,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+level+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+variety+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
+				sql = "Insert into CropDamage(CropdamageID,latitude,longitude, provname,munname,bgyname,farmloc,ownername,farmarea,farmname,lastname,firstname,farmeraddress,flood,submergeddays,wind,exposure,ctype,ecosystem,variety,sclass,stage,yieldbefore,yieldafter,partially,totally,remarks,photo1,photo2,surveyedby,datesurvey,timesurvey)Values('"+damageid+"','"+lat+"','"+lng+"','"+prov+"','"+muni+"','"+brgy+"','"+farmloc+"','"+owner+"','"+farmarea+"','"+frname+"','"+flastname+"','"+ffname+"','"+faddress+"','"+flood+"','"+submergedays+"','"+wind+"','"+exposure+"','"+ctype+"','"+ecosystem+"','"+variety+"','"+sclass+"','"+stage+"','"+yieldbefore+"','"+yieldafter+"','"+partially+"','"+totally+"','"+remarks+"','"+pname1+"','"+pname2+"','"+user+"','"+sdate+"','"+stime+"')";
 				alert("Save Successfully");
 			}
 			else if(savemode=="edit"){
@@ -434,8 +430,6 @@ $("#btnsave").click(function(){
 				//
 				
 				var s=$("#croplist li").find("h2").text();
-				alert(s);
-				alert(pname1+pname2);
 				alert("update successfully");
 				$("#croplist").listview("refresh");
 			}

@@ -22,7 +22,7 @@ $(document).ready(function(){
 			alert("Your User ID is: "+ user);	
 			location = "index.html#menu";
 		}
-		else if (id != '#' && id != ''){
+		else if (id != '#' && id == ''){
 			alert("Wrong User ID");
 		}
 	});
@@ -348,13 +348,13 @@ $("#btnsave").click(function(){
 			var prov = $("#prov").find(":selected").text();
 			var muni = $("#muni").find(":selected").text();
 			var brgy = $("#brgy").find(":selected").text();
-			var farmloc = $('input:text[id=farmloc]').val().toString().replace(/,/g, "");
-			var owner = $('input:text[id=owner]').val().toString().replace(/,/g, "");
+			var farmloc = $('input:text[id=farmloc]').val().toString().replace(/["',]/g, "");
+			var owner = $('input:text[id=owner]').val().toString().replace(/["',]/g, "");
 			var farmarea = $("#farea").val();
-			var frname = $('input:text[id=frname]').val().toString().replace(/,/g, "");
-			var flastname = $('input:text[id=flname]').val().toString().replace(/,/g, "");
-			var ffname = $('input:text[id=ffname]').val().toString().replace(/,/g, "");
-			var faddress = $('input:text[id=faddress]').val().toString().replace(/,/g, "");
+			var frname = $('input:text[id=frname]').val().toString().replace(/["',]/g, "");
+			var flastname = $('input:text[id=flname]').val().toString().replace(/["',]/g, "");
+			var ffname = $('input:text[id=ffname]').val().toString().replace(/["',]/g, "");
+			var faddress = $('input:text[id=faddress]').val().toString().replace(/["',]/g, "");
 			var flood = $('#flood').prop("checked");
 			var submergedays = $("#submergedays").find(":selected").text();
 			var wind = $('#wind').prop("checked");
@@ -364,11 +364,11 @@ $("#btnsave").click(function(){
 			var variety = $("#variety").find(":selected").text();
 			var sclass = $("#sclass").find(":selected").text();
 			var stage = $("#stage").find(":selected").text();
-			var yieldbefore = $('#yieldbefore').val().toString().replace(/,/g, "");
-			var yieldafter = $('#yieldafter').val().toString().replace(/,/g, "");
-			var partially = $('#partially').val().toString().replace(/,/g, "");
-			var totally = $('#totally').val().toString().replace(/,/g, "");
-			var remarks = $('#remarks').val().toString().replace(/,/g, "");
+			var yieldbefore = $('#yieldbefore').val().toString().replace(/["',]/g, "");
+			var yieldafter = $('#yieldafter').val().toString().replace(/["',]/g, "");
+			var partially = $('#partially').val().toString().replace(/["',]/g, "");
+			var totally = $('#totally').val().toString().replace(/["',]/g, "");
+			var remarks = $('#remarks').val().toString().replace(/["',]/g, "");
 			var pname1 = $("#t1").attr("data-filename");
 			var pname2 = $("#t2").attr("data-filename");
 			
@@ -430,8 +430,6 @@ $("#btnsave").click(function(){
 				//
 				
 				var s=$("#croplist li").find("h2").text();
-				alert(s);
-				alert(pname1+pname2);
 				alert("update successfully");
 				$("#croplist").listview("refresh");
 			}
@@ -777,11 +775,13 @@ function initDatabase() {
 		}); 	
 		//reset the database
 		$("#reset").click(function(){
+		 if(confirm("Are you sure you want to reset the database? ")){	
 			db.transaction(function(tx){
 				tx.executeSql("delete from CropDamage");
 			});
 			$(":mobile-pagecontainer").pagecontainer("change", "#menu", {reloadPage:false});
 			alert("Successfully reset the database");
+		 }
 		});
 		savetocsv();
 	}//end of database initialization
