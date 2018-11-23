@@ -22,7 +22,7 @@ $(document).ready(function(){
 			alert("Your User ID is: "+ user);	
 			location = "index.html#menu";
 		}
-		else if (id != '#' && id != ''){
+		else if (id != '#' && id == ''){
 			alert("Wrong User ID");
 		}
 	});
@@ -247,7 +247,8 @@ function onDeviceReady(){
 			window.resolveLocalFileSystemURL(imageURI,function(fileEntry){
 				window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 					fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
-						CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+						CDCTDir.getDirectory(user,{create:true,exclusive:false},function(userDir){
+						userDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
 						
 						   var lt=$("#lat").val();
 							var lg=$("#lng").val();
@@ -261,6 +262,9 @@ function onDeviceReady(){
 						},function(e){
 							alert("Cant open images folder");
 						});
+					},function(e){
+						alert("Cant open user Folder");
+					});
 					},function(e){
 						alert("Cant open CDCT Folder");
 					});
@@ -775,11 +779,13 @@ function initDatabase() {
 		}); 	
 		//reset the database
 		$("#reset").click(function(){
+		 if(confirm("Are you sure you want to reset the database? ")){	
 			db.transaction(function(tx){
 				tx.executeSql("delete from CropDamage");
 			});
 			$(":mobile-pagecontainer").pagecontainer("change", "#menu", {reloadPage:false});
 			alert("Successfully reset the database");
+		 }
 		});
 		savetocsv();
 	}//end of database initialization
