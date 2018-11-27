@@ -37,8 +37,15 @@
 			<div data-theme="a" data-tap-toggle="false" data-role="header" data-position="fixed">
 				<h1>Crop Damage Capture Tool</h1>
 			</div>
-			<section id="title">
-				<h1 id="ctitle">Crop Damage Capture Tool</h1>
+			<section id="title" style="padding-top:10px">
+				<center>
+				<img src="img/phivolcs.png" style="width:100px; height:100px;">
+				<img src="img/pagasa.png" style="width:100px; height:100px;">
+				<img src="img/asis.png" style="width:100px; height:100px;">
+				<img src="img/bsu.png" style="width:100px; height:100px;">
+				<img src="img/asc.png" style="width:100px; height:100px;">
+				<img src="img/ksu.png" style="width:100px; height:100px;">
+				</center>
 			</section>
 			<section>
 			<div class="ui-grid-a">
@@ -188,27 +195,27 @@
 					<hr>
 					<h4>Yield per Hectare (MT)<a href="#yloss" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a></h4>
 					<div data-role="popup" id="yloss" class="ui-content" data-theme="a" style="max-width:350px;">
-					<p>Yield per hectare in metric tons</p>
+					<p>Yield per hectare per parcel in metric tons</p>
 					</div>
 					Yield Before Calamity<a href="#ybinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="ybinfo" class="ui-content" data-theme="a" style="max-width:350px;">
-					<p>refers to the average yield per hectare <strong>before</strong> the occurrence of the calamity</p>
+					<p>refers to the average yield per hectare per parcel <strong>before</strong> the occurrence of the calamity</p>
 					</div>
 					<input required type="number" id="yieldbefore">
 					Yield After Calamity<a href="#yafter" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="yafter" class="ui-content" data-theme="a" style="max-width:350px;">
-					<p>refers to the actual average yield per hectare <strong>after</strong> the occurrence of the calamity</p>
+					<p>refers to the actual average yield per hectare per parcel<strong>after</strong> the occurrence of the calamity</p>
 					</div>
 					<input required type="number" id="yieldafter">
 					<h4>Area Affected (ha)</h4>
 					Partially Damaged<a href="#partiallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="partiallyinfo" class="ui-content" data-theme="a" style="max-width:350px;">
-					<p>refers to the actual partially damage field per hectare <strong>after</strong> the occurrence of the calamity</p>
+					<p>refers to the actual partially damage field per hectare per parcel<strong>after</strong> the occurrence of the calamity</p>
 					</div>
 					<input type="number" id="partially">
 					Totally Damaged<a href="#totallyinfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-alt-icon ui-btn-icon-notext ui-btn-inline ui-icon-info ui-btn-icon-right ui-btn-b" title="Yield Before Calamity"style="border:none;">Information</a>
 					<div data-role="popup" id="totallyinfo" class="ui-content" data-theme="a" style="max-width:350px;">
-					<p>refers to the actual totally damage field per hectare <strong>after</strong> the occurrence of the calamity</p>
+					<p>refers to the actual totally damage field per hectare per parcel<strong>after</strong> the occurrence of the calamity</p>
 					</div>
 					<input type="number" id="totally">
 					Remarks

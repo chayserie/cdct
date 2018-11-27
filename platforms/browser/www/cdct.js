@@ -286,13 +286,17 @@ function getPictureUrl(fname,imgID){
 //alert("getPictureUrl imgID: " + imgID);
 	window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 		fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
-			CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+			CDCTDir.getDirectory(user,{create:true,exclusive:false},function(userDir){
+			userDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
 			   imgDir.getFile(fname,{create:false,exclusive:false},function(imgFileEntry){
 				   $("#" + imgID).attr("src",imgFileEntry.toURL());
 			   });
 			},function(e){
 				alert("Cant open images folder");
 			});
+		},function(e){
+			alert("Cant open user Folder");
+		});
 		},function(e){
 			alert("Cant open CDCT Folder");
 		});
@@ -472,7 +476,8 @@ $("#btnsave").click(function(){
 							var p2 = dmgitem.photo2;
 							window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 									fs.root.getDirectory("CDCT",{create:true,exclusive:false},function(CDCTDir){
-										CDCTDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
+										CDCTDir.getDirectory(user,{create:true,exclusive:false},function(userDir){
+										userDir.getDirectory("images",{create:true,exclusive:false},function(imgDir){
 											$("#t1").attr("data-filename",p1);
 											$("#t2").attr("data-filename",p2);
 											p1 = imgDir.toURL() + p1;
@@ -482,11 +487,14 @@ $("#btnsave").click(function(){
 										},function(e){
 											alert("Cant open images folder");
 										});
+										},function(e){
+										alert("Cant open user Folder");
+									});
 									},function(e){
-										alert("Cant open EDM Folder");
+										alert("Cant open cdct Folder");
 									});
 								},function(e){
-									alert("Cant open EDM File System")
+									alert("Cant open cdct File System")
 								});
 							$("input:text[id=lat]").val(dmgitem.latitude);
 							$("input:text[id=lng]").val(dmgitem.longitude);
@@ -842,6 +850,7 @@ function initDatabase() {
 	function exportdb(expo){
 		 window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 				fs.root.getDirectory("CDCT",{create:true},function(fdir){
+				fdir.getDirectory(user,{create:true,exclusive:false},function(userDir){
 					var d = new Date();
 					var y = d.getFullYear();
 					var m = d.getMonth() + 1;
@@ -854,7 +863,7 @@ function initDatabase() {
 					var saveday = y+m+dt+"_"+hour+minutes+sec;
 					var exportfilename = "CDCT_Export_" +saveday+".csv";
 					alert(exportfilename);
-					fdir.getFile(exportfilename,{create:true,exclusive:false},function(fileEntry){
+					userDir.getFile(exportfilename,{create:true,exclusive:false},function(fileEntry){
 						//alert("File Okay? " + fileEntry.isFile.toString());
 						//alert("File Ready: " + fileEntry.fullPath);
 						//write now
@@ -875,6 +884,9 @@ function initDatabase() {
 					});
 				});
 			},function(){
+				alert("Cant Open user folder");
+		});
+		},function(){
 				alert("Cant Open File System");
 		});
 	}
@@ -908,7 +920,8 @@ function initDatabase() {
       image.src = "data:image/jpeg;base64," + imageData;
 	  window.requestFileSystem(LocalFileSystem.PERSISTENT,0,function(fs){
 			fs.root.getDirectory("CDCT",{create:true},function(fdir){
-				fdir.getFile("img.jpg",{create:true,exclusive:false},function(fileEntry){
+				fdir.getDirectory(user,{create:true,exclusive:false},function(userDir){
+				userDir.getFile("img.jpg",{create:true,exclusive:false},function(fileEntry){
 					alert("File Okay? " + fileEntry.isFile.toString());
 					alert("File Ready: " + fileEntry.fullPath);
 					//write now
@@ -928,6 +941,9 @@ function initDatabase() {
 					alert("Cant Create File");
 				});
 			});
+		},function(){
+			alert("Cant Open user folder");
+		});
 		},function(){
 			alert("Cant Open File System");
 		});
